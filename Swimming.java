@@ -2,10 +2,11 @@ package Assignment1;
 
 public class Swimming extends Game{
 	private String gameID;
-	private boolean result;
+	private boolean result = false;
+	private String gameType;
 	
-	public Swimming(String gameID, boolean result) {
-		super(gameID, result);
+	public Swimming(String gameID, String gameType, boolean result) {
+		super(gameID, gameType, result);
 		
 	}
 

@@ -1,9 +1,12 @@
 package Assignment1;
 
 public class Cycling extends Game{
-	int CyclingGameNumber = 1;
-	public Cycling(String gameID, boolean result) {
-		super(gameID, result);
+	private String gameID;
+	private boolean result = false;
+	private String gameType;
+	
+	public Cycling(String gameID, String gameType, boolean result) {
+		super(gameID, gameType, result);
 		// TODO Auto-generated constructor stub
 	}
 

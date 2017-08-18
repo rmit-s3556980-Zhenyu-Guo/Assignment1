@@ -1,6 +1,11 @@
 package Assignment1;
 
 public class Sprinter extends Athletes{
+	private String ID;
+	private String name;
+	private String age;
+	private String stateOfAustralia;
+	private int point;
 
 	public Sprinter(String rID, String name, String age, String stateOfAustralia, int point) {
 		super(rID, name, age, stateOfAustralia, point);
@@ -8,7 +13,7 @@ public class Sprinter extends Athletes{
 	}
 
 	@Override
-	public double compete() {
+	public double compete(String type) {
 		double time = (1 + Math.random()) * 10;
 		return time;
 	}

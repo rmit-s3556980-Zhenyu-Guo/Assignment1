@@ -40,7 +40,7 @@ public abstract class Athletes {
 		this.point = point;
 	}
 	
-	public abstract double compete();
+	public abstract double compete(String type);
 	
 	
 	
