@@ -36,8 +36,8 @@ public abstract class Athletes {
 		return point;
 	}
 	
-	public void setPoint(){
-		this.point = point;
+	public void setPoint(int amt){
+		this.point = point + amt;
 	}
 	
 	public abstract double compete(String type);
