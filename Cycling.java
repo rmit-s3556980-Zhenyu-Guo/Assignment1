@@ -4,9 +4,10 @@ public class Cycling extends Game{
 	private String gameID;
 	private boolean result = false;
 	private String gameType;
+	private String predict;
 	
-	public Cycling(String gameID, String gameType, boolean result) {
-		super(gameID, gameType, result);
+	public Cycling(String gameID, String gameType, boolean result, String predict) {
+		super(gameID, gameType, result, predict);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -4,9 +4,10 @@ public class Swimming extends Game{
 	private String gameID;
 	private boolean result = false;
 	private String gameType;
+	private String predict;
 	
-	public Swimming(String gameID, String gameType, boolean result) {
-		super(gameID, gameType, result);
+	public Swimming(String gameID, String gameType, boolean result, String predict) {
+		super(gameID, gameType, result, predict);
 		
 	}
 

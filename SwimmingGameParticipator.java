@@ -1,14 +1,16 @@
 package Assignment1;
+
+import java.util.ArrayList;
 import java.util.*;
-public class RunningGameParticipator {
+public class SwimmingGameParticipator {
 	ArrayList<Official> OfficialInGame;
-	ArrayList<Cyclist> SprinterInGame;
+	ArrayList<Cyclist> SwimmerInGame;
 	ArrayList<SuperAthletes> SuperAthletesInGame;
 	
-	public RunningGameParticipator(ArrayList<Official> OfficialInGame, ArrayList<Cyclist> SprinterInGame, 
+	public SwimmingGameParticipator(ArrayList<Official> OfficialInGame, ArrayList<Cyclist> SwimmerInGame, 
 				ArrayList<SuperAthletes> SuperAthletesInGame){
 		this.OfficialInGame = OfficialInGame;
-		this.SprinterInGame = SprinterInGame;
+		this.SwimmerInGame = SwimmerInGame;
 		this.SuperAthletesInGame = SuperAthletesInGame;
 	}
 	
@@ -16,15 +18,15 @@ public class RunningGameParticipator {
 		return OfficialInGame;
 	}
 	public ArrayList getCyclistInGame(){
-		return SprinterInGame;
+		return SwimmerInGame;
 	}
 	public ArrayList getSuperAthletesInGame(){
 		return SuperAthletesInGame;
 	}
 	public void printAthletes(){
-		if(SprinterInGame.size()!=0){
-			for(int i=0; i<SprinterInGame.size();i++){
-				System.out.println("Athlete's ID: " + SprinterInGame.get(i).getID() + "\tAthletet's name: " + SprinterInGame.get(i).getName());
+		if(SwimmerInGame.size()!=0){
+			for(int i=0; i<SwimmerInGame.size();i++){
+				System.out.println("Athlete's ID: " + SwimmerInGame.get(i).getID() + "\tAthletet's name: " + SwimmerInGame.get(i).getName());
 			}
 		}
 		if(SuperAthletesInGame.size()!=0){
@@ -33,5 +35,5 @@ public class RunningGameParticipator {
 			}
 		}
 	}
-	
+
 }
