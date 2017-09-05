@@ -43,6 +43,9 @@ public class TestCase {
 		
 //Test official menu
 //		d.Officer();
+//		d.Cyclist();
+//		d.SuperAthletes();
+		
 //		d.officialMenu();
 //		int z = 001;
 //		int x = 2;

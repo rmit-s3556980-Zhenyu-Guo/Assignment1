@@ -19,39 +19,42 @@ public class Driver {
 	Data data = new Data();
 	
 	
-	
-//	public void Officer(){
-//		data.getOfficialList().put("a1", new Official("a1", "bowen", "cc", "dd"));
-//		data.getOfficialList().put("a2", new Official("a2", "cc", "cc", "dd"));
-//		data.getOfficialList().put("a3", new Official("a3", "yu", "cc", "dd"));
-//		data.getOfficialList().put("a4", new Official("a4", "elva", "cc", "dd"));
-//		data.getOfficialList().put("a5", new Official("a5", "bb", "cc", "dd"));
-//		data.getOfficialList().put("a6", new Official("a6", "ab", "cc", "dd"));		
-//	}
-//	public void SuperAthletes(){
-//		data.getSuperAthletesList().put("SA01", new SuperAthletes("SA01", "ds", "asdff", "fa", 0));
-//		data.getSuperAthletesList().put("SA02", new SuperAthletes("SA02", "ds", "asdff", "fa", 0));
-//		data.getSuperAthletesList().put("SA03", new SuperAthletes("SA03", "ds", "asdff", "fa", 0));
-//		data.getSuperAthletesList().put("SA04", new SuperAthletes("SA04", "ds", "asdff", "fa", 0));
-//		data.getSuperAthletesList().put("SA05", new SuperAthletes("SA05", "ds", "asdff", "fa", 0));
-//		data.getSuperAthletesList().put("SA06", new SuperAthletes("SA06", "ds", "asdff", "fa", 0));
-//	}
-//	public void Cyclist(){
-//		data.getCyclistList().put("c1", new Cyclist("c1", "bq", "ff", "aa", 0));
-//		data.getCyclistList().put("c2", new Cyclist("c2", "bq", "ff", "aa", 0));
-//		data.getCyclistList().put("c3", new Cyclist("c3", "bq", "ff", "aa", 0));
-//		data.getCyclistList().put("c4", new Cyclist("c4", "bq", "ff", "aa", 0));
-//		data.getCyclistList().put("c5", new Cyclist("c5", "bq", "ff", "aa", 0));
-//		data.getCyclistList().put("c6", new Cyclist("c6", "bq", "ff", "aa", 0));
-//		data.getCyclistList().put("c7", new Cyclist("c7", "bq", "ff", "aa", 0));
-//		
-//	}
+	int dataInsert = 0;
+	public void Officer(){
+		data.getOfficialList().put("a1", new Official("a1", "bowen", "cc", "dd"));
+		data.getOfficialList().put("a2", new Official("a2", "cc", "cc", "dd"));
+		data.getOfficialList().put("a3", new Official("a3", "yu", "cc", "dd"));
+		data.getOfficialList().put("a4", new Official("a4", "elva", "cc", "dd"));
+		data.getOfficialList().put("a5", new Official("a5", "bb", "cc", "dd"));
+		data.getOfficialList().put("a6", new Official("a6", "ab", "cc", "dd"));		
+	}
+	public void SuperAthletes(){
+		data.getSuperAthletesList().put("SA01", new SuperAthletes("SA01", "ds", "asdff", "fa", 0));
+		data.getSuperAthletesList().put("SA02", new SuperAthletes("SA02", "ds", "asdff", "fa", 0));
+		data.getSuperAthletesList().put("SA03", new SuperAthletes("SA03", "ds", "asdff", "fa", 0));
+		data.getSuperAthletesList().put("SA04", new SuperAthletes("SA04", "ds", "asdff", "fa", 0));
+		data.getSuperAthletesList().put("SA05", new SuperAthletes("SA05", "ds", "asdff", "fa", 0));
+		data.getSuperAthletesList().put("SA06", new SuperAthletes("SA06", "ds", "asdff", "fa", 0));
+	}
+	public void Cyclist(){
+		data.getCyclistList().put("c1", new Cyclist("c1", "bq", "ff", "aa", 0));
+		data.getCyclistList().put("c2", new Cyclist("c2", "bq", "ff", "aa", 0));
+		data.getCyclistList().put("c3", new Cyclist("c3", "bq", "ff", "aa", 0));
+		data.getCyclistList().put("c4", new Cyclist("c4", "bq", "ff", "aa", 0));
+		data.getCyclistList().put("c5", new Cyclist("c5", "bq", "ff", "aa", 0));
+		data.getCyclistList().put("c6", new Cyclist("c6", "bq", "ff", "aa", 0));
+		data.getCyclistList().put("c7", new Cyclist("c7", "bq", "ff", "aa", 0));
+		
+	}
 	
 	//the first layer
 	public void meanMenu(){
-		data.Cyclist();
-		data.Officer();
-		data.SuperAthletes();
+		if(dataInsert==0){
+			data.Officer();
+			data.Cyclist();
+			data.SuperAthletes();
+			dataInsert++;
+		}
 		System.out.println("Ozlympic Game");
 		System.out.println("================================================");
 		System.out.println("---1---Select a game to run---------------------");
@@ -95,6 +98,12 @@ public class Driver {
 			}
 			else if(choice == 3){
 				startTheGame();
+			}
+			else if(choice == 4){
+				desplayAllGameResults();
+			}
+			else if(choice == 5){
+				displayPointsOfAllAthletes();
 			}
 			else if(choice == 6){
 				System.out.println("------Bye------");
@@ -431,6 +440,7 @@ public class Driver {
 			if(data.getOfficialList().get(ID) != null){
 				cyclingGP.getOfficialInGame().add(data.getSuperAthletesList().get(ID));				
 				System.out.println("Your choice is successfull!");
+				
 				cyclingMenuControl(gameID, cyclingGP);
 			} 
 			else {
@@ -557,7 +567,7 @@ public class Driver {
 			}
 			else{
 				System.out.println("The game does not exist.");
-				meanMenu();
+				meanMenuControl();
 			}
 			
 		}
@@ -625,19 +635,208 @@ public class Driver {
 			sa1.setPoint(5);
 		}
 		if(data.getCyclistList().get(second) != null){
-			Cyclist c2 = (Cyclist) data.getCyclistList().get(winner);
-			c2.setPoint(5);
+			Cyclist c2 = (Cyclist) data.getCyclistList().get(second);
+			c2.setPoint(2);
 		}else{
-			SuperAthletes sa2 = (SuperAthletes) data.getSuperAthletesList().get(winner);
-			sa2.setPoint(5);
+			SuperAthletes sa2 = (SuperAthletes) data.getSuperAthletesList().get(second);
+			sa2.setPoint(2);
+		}
+		if(data.getCyclistList().get(third) != null){
+			Cyclist c2 = (Cyclist) data.getCyclistList().get(third);
+			c2.setPoint(1);
+		}else{
+			SuperAthletes sa2 = (SuperAthletes) data.getSuperAthletesList().get(third);
+			sa2.setPoint(1);
+		}
+//		setPoints(winner, second, third);
+		meanMenuControl();
+	}
+	public void setPoints(String winner, String second, String third){
+		if(data.getCyclistList().get(winner) != null){
+			Cyclist c1 = (Cyclist) data.getCyclistList().get(winner);
+			c1.setPoint(5);
+		}else{
+			SuperAthletes sa1 = (SuperAthletes) data.getSuperAthletesList().get(winner);
+			sa1.setPoint(5);
+		}
+		if(data.getCyclistList().get(second) != null){
+			Cyclist c2 = (Cyclist) data.getCyclistList().get(second);
+			c2.setPoint(2);
+		}else{
+			SuperAthletes sa2 = (SuperAthletes) data.getSuperAthletesList().get(second);
+			sa2.setPoint(2);
+		}
+		if(data.getCyclistList().get(third) != null){
+			Cyclist c2 = (Cyclist) data.getCyclistList().get(third);
+			c2.setPoint(1);
+		}else{
+			SuperAthletes sa2 = (SuperAthletes) data.getSuperAthletesList().get(third);
+			sa2.setPoint(1);
+		}
+	}
+	
+	public void desplayAllGameResults(){
+		if(data.getResultList().size()!=0){
+			Iterator iter = data.getResultList().entrySet().iterator();		
+			while (iter.hasNext()){
+				HashMap.Entry<String, HashMap<String, Double>> entry = (Entry<String, HashMap<String, Double>>)iter.next();
+				System.out.println("Test\t" + entry.getKey());
+				printResults(entry.getKey());
+			}
+		} else {
+			System.out.println("There are not any game has been finished!");
+			meanMenuControl();
+		}
+	}
+	
+	public void printResults(String gameID){
+		System.out.println("Test\t" + gameID);
+		HashMap<String, Double> result = (HashMap<String, Double>) data.getResultList().get(gameID);
+		Double[] rank = new Double[result.size()];
+		int i = 0;
+		Iterator iter = result.entrySet().iterator();		
+		while (iter.hasNext()){
+			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
+			//System.out.println("ID" + entry.getKey() + "time" + entry.getValue());
+			rank[i] = entry.getValue();
+			System.out.println("test 1 \t" + rank[i]);
+			i++;		
+		}
+		System.out.println("test2");
+		Arrays.sort(rank);
+		String winner = null, second = null, third = null, referee = null;
+		String winnerName = null, seconderName = null, thirderName = null, refereeName = null;
+		iter = result.entrySet().iterator();
+		while (iter.hasNext()){
+			System.out.println("test3");
+			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
+			if(rank[0]==entry.getValue()){
+				winner = entry.getKey();
+			}
+			if(rank[1]==entry.getValue()){
+				second = entry.getKey();
+			}
+			if(rank[2]==entry.getValue()){
+				third = entry.getKey();
+			}
+		}
+		System.out.println("Test3" + winner + "\t" + winnerName);
+		winnerName = getAthletesName(winner, winnerName);
+		System.out.println("Test4" + winner + "\t" + winnerName);
+		seconderName = getAthletesName(second, seconderName);
+		thirderName = getAthletesName(third, thirderName);
+//		referee = getOfficialDetails(gameID,referee);
+//		System.out.println("Test5" + referee);
+//		if(data.getCyclingGameList().get(gameID) != null){
+//			System.out.println("Test5");
+//			CyclingGameParticipator cgp = (CyclingGameParticipator) data.getCyclingGameList().get(gameID);
+//			Official o = (Official) cgp.getOfficialInGame().get(0);
+//			referee = o.getID();
+//			refereeName = o.getName();
+//			System.out.println("Test 6 : " + referee + "     " + refereeName);
+//		}
+//		else if(data.getSwimmingGameList().get(gameID) != null){
+//			SwimmingGameParticipator sgp = (SwimmingGameParticipator) data.getSwimmingGameList().get(gameID);
+//			Official o = (Official) sgp.getOfficialInGame().get(0);
+//			referee = o.getID();
+//			refereeName = o.getName();
+//		} else {
+//			RunningGameParticipator rgp = (RunningGameParticipator) data.getRunningGameList().get(gameID);
+//			Official o = (Official) rgp.getOfficialInGame().get(0);
+//			referee = o.getID();
+//			refereeName = o.getName();
+//		}
+		System.out.println("GameID: " + gameID);
+		CyclingGameParticipator cp = (CyclingGameParticipator) data.getCyclingGameList().get(gameID);
+//		cp.printOfficial();
+		System.out.println("RefereeID: " + referee + "Referee's Name: " + refereeName);
+		System.out.println("WinnerID: " + winner + "Winner's Name: " + winnerName + "Result: " + rank[0]);
+		System.out.println("SeconderID: " + winner + "seconder's Name: " + seconderName + "Result: " + rank[1]);
+		System.out.println("ThirderID: " + winner + "thirder's Name: " + thirderName + "Result: " + rank[2]);
+	}
+	
+	public String getAthletesName(String ID, String Name){
+		if(data.getCyclistList().get(ID)!=null){
+			Cyclist c = (Cyclist) data.getCyclistList().get(ID);
+			Name = c.getName();
+		} 
+		else if(data.getSwimmerList().get(ID)!=null){
+			Swimmer s = (Swimmer) data.getSwimmerList().get(ID);
+			Name = s.getName();
+		}
+		else if(data.getsprinterList().get(ID)!=null){
+			Sprinter r = (Sprinter) data.getsprinterList().get(ID);
+			Name = r.getName();
+		}
+		else {
+			SuperAthletes first = (SuperAthletes) data.getCyclistList().get(ID);
+			Name = first.getName();
+		}
+		return Name;
+	}
+	
+	
+	public String getOfficialDetails(String gameID, String officialID){
+		if(data.getCyclingGameList().get(gameID) != null){
+			CyclingGameParticipator cgp = (CyclingGameParticipator) data.getCyclingGameList().get(gameID);
+			Official o = (Official) cgp.getOfficialInGame().get(0);
+			officialID = o.getID();
+			String Name = o.getName();
+		}
+		else if(data.getSwimmingGameList().get(gameID) != null){
+			SwimmingGameParticipator sgp = (SwimmingGameParticipator) data.getSwimmingGameList().get(gameID);
+			Official o = (Official) sgp.getOfficialInGame().get(0);
+			officialID = o.getID();
+			String Name = o.getName();
+		} else {
+			RunningGameParticipator rgp = (RunningGameParticipator) data.getRunningGameList().get(gameID);
+			Official o = (Official) rgp.getOfficialInGame().get(0);
+			officialID = o.getID();
+			String Name = o.getName();
+		}
+		return officialID;
+	}
+	
+	public void displayPointsOfAllAthletes(){
+		Iterator iter = data.getCyclistList().entrySet().iterator();		
+		while (iter.hasNext()){
+			HashMap.Entry<String, Cyclist> entry = (Entry<String, Cyclist>)iter.next();
+			System.out.println("Cyclist ID : " + entry.getKey() + "\tCyclist Name : " 
+					+ entry.getValue().getName() + "\tCyclist points : " + entry.getValue().getPoint());
+		}
+		iter = data.getSwimmerList().entrySet().iterator();		
+		while (iter.hasNext()){
+			HashMap.Entry<String, Swimmer> entry = (Entry<String, Swimmer>)iter.next();
+			System.out.println("Swimmer ID : " + entry.getKey() + "\tSwimmer Name : " 
+					+ entry.getValue().getName() + "\tSwimmer points : " + entry.getValue().getPoint());
+		}
+		iter = data.getsprinterList().entrySet().iterator();		
+		while (iter.hasNext()){
+			HashMap.Entry<String, Sprinter> entry = (Entry<String, Sprinter>)iter.next();
+			System.out.println("Sprinter ID : " + entry.getKey() + "\tSprinter Name : " 
+					+ entry.getValue().getName() + "\tSprinter points : " + entry.getValue().getPoint());
+		}
+		iter = data.getSuperAthletesList().entrySet().iterator();		
+		while (iter.hasNext()){
+			HashMap.Entry<String, SuperAthletes> entry = (Entry<String, SuperAthletes>)iter.next();
+			System.out.println("SuperAthletes ID : " + entry.getKey() + "\tSuperAthletes Name : " 
+					+ entry.getValue().getName() + "\tSuperAthletes points : " + entry.getValue().getPoint());
 		}
 		meanMenuControl();
 	}
 	
-	public void printResults(){
-		
-	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 }
+
+
+

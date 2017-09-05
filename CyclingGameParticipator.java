@@ -40,5 +40,8 @@ public class CyclingGameParticipator {
 			}
 		}
 	}
+	public void printOfficial(){
+		System.out.println("Official's ID: " + OfficialInGame.get(0).getID() + "\tOfficial's Name: " + OfficialInGame.get(0).getName());
+	}
 
 }
