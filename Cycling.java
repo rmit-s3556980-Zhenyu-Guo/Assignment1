@@ -1,6 +1,6 @@
-package Assignment1;
 
 public class Cycling extends Game{
+
 	private String gameID;
 	private boolean result = false;
 	private String gameType;
@@ -12,9 +12,9 @@ public class Cycling extends Game{
 	}
 
 	@Override
-	public void setGameID() {
+	public void setGameID(String gameID) {
 		// TODO Auto-generated method stub
-		
+		this.gameID = gameID;
 	}
 
 	@Override
@@ -28,5 +28,6 @@ public class Cycling extends Game{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 }

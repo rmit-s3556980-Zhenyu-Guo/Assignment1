@@ -1,8 +1,7 @@
-package Assignment1;
-
 import java.util.Random;
 
-public class SuperAthletes extends Athletes {
+public class SuperAthletes extends Athletes{
+
 	private String ID;
 	private String name;
 	private String age;
@@ -32,5 +31,4 @@ public class SuperAthletes extends Athletes {
 			System.out.println("Something wrong with the type!");
 		return time;
 	}
-
 }

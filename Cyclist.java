@@ -1,8 +1,8 @@
-package Assignment1;
+import java.text.DecimalFormat;
+import java.util.Random;
 
-import java.util.*;
+public class Cyclist extends Athletes {
 
-public class Cyclist extends Athletes{
 	private String ID;
 	private String name;
 	private String age;
@@ -18,6 +18,9 @@ public class Cyclist extends Athletes{
 		Random rand = new Random();
 		// To make a random double from 500 to 800
 		double time = (rand.nextInt(3) + 5 + Math.random()) * 100;
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		String convertDouble = decimalFormat.format(time);
+		time = Double.parseDouble(convertDouble);
 		return time;
 	}
 

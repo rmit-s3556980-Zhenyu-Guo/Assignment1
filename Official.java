@@ -1,6 +1,6 @@
-package Assignment1;
 
 public class Official {
+
 	private String ID;
 	private String name;
 	private String age;

@@ -1,7 +1,6 @@
-package Assignment1;
 
 public abstract class Athletes {
-	
+
 	private String ID;
 	private String name;
 	private String age;
@@ -43,14 +42,4 @@ public abstract class Athletes {
 	public abstract double compete(String type);
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

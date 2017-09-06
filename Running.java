@@ -1,4 +1,3 @@
-package Assignment1;
 
 public class Running extends Game{
 	private String gameID;
@@ -12,7 +11,7 @@ public class Running extends Game{
 	}
 
 	@Override
-	public void setGameID() {
+	public void setGameID(String gameID) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -28,5 +27,6 @@ public class Running extends Game{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 }

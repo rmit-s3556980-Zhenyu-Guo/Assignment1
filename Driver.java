@@ -1,22 +1,13 @@
-package Assignment1;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Scanner;
 import java.util.Map.Entry;
 
 public class Driver {
-	//public HashMap<String, Sprinter> sprinterList = new HashMap<String, Sprinter>();
-	//public HashMap<String, Swimmer> swimmerList = new HashMap<String, Swimmer>();
-	//public HashMap<String, Cyclist> cyclistList = new HashMap<String, Cyclist>();
-	//public HashMap<String, Official> officialList = new HashMap<String, Official>();
-	//public HashMap<String, SuperAthletes> superAthletesList = new HashMap<>();
-	//public HashMap<String, RunningGameParticipator> runningGameList = new HashMap<String, RunningGameParticipator>();
-	//public HashMap<String, CyclingGameParticipator> cyclingGameList = new HashMap<String, CyclingGameParticipator>();
-	//public HashMap<String, SwimmingGameParticipator> swimmingGameList = new HashMap<String, SwimmingGameParticipator>();
-	//All above HashMap are put in Data Class.
-	
-	
-	
-	Data data = new Data();
+
+Data data = new Data();
 	
 	
 	int dataInsert = 0;
@@ -75,23 +66,7 @@ public class Driver {
 				gameMenuControl();
 			else if(choice == 0){
 				System.out.println("Now, we have these cyclists :");
-				Iterator iter = data.getCyclingGameList().entrySet().iterator();
-				while(iter.hasNext()){
-					HashMap.Entry<String, Cyclist> entry = (Entry<String, Cyclist>)iter.next();
-					System.out.println("game ID : " + entry.getKey());
-					
-					System.out.println("There are " + ((CyclingGameParticipator) data.getCyclingGameList().get(entry.getKey())).getOfficialInGame().size() + " official in this game");
-					System.out.println("There are " + ((CyclingGameParticipator) data.getCyclingGameList().get(entry.getKey())).getCyclistInGame().size() + " cyclists in this game");
-					System.out.println("There are " + ((CyclingGameParticipator) data.getCyclingGameList().get(entry.getKey())).getSuperAthletesInGame().size() + " superathletes in this game");
-					Iterator it = data.getCyclingGameList().entrySet().iterator();
-					while(it.hasNext()){
-						HashMap.Entry<String, CyclingGameParticipator> en = (Entry<String, CyclingGameParticipator>)it.next();
-						System.out.println("game ID : " + en.getKey() + "\tpredict : " 
-								+ en.getValue().getCyclingGame().getPredict());
-						
-					}
-					
-				}
+				
 			}
 			else if(choice == 2 ){
 				predictMenuControl();
@@ -135,6 +110,11 @@ public class Driver {
 	private int cyclingGameNumber = 1;
 	//private int RunningGameNumber = 1;
 	//private int SwimmingGameNumber = 1;
+//	private Swimming s;
+//	private Running r;
+//	private Cycling c;
+//	private Official o;
+//	private String gameType;
 	
 	
 	public void gameMenuControl(){
@@ -147,14 +127,13 @@ public class Driver {
 			if(choice == 1){
 				String gameID = "C" + Integer.toString(cyclingGameNumber);
 				cyclingGameNumber++;
-				Cycling cy = new Cycling(gameID, "Cycling", false, null);
-				
+				Cycling cycling = new Cycling(gameID, "Cycling", false, null);
+				data.setCycling(cycling);
+				data.setGameType("Cycling");
 				ArrayList<Cyclist> cyclistInGame = new ArrayList<Cyclist>();
 				ArrayList<Official> officialInGame = new ArrayList<Official>();
 				ArrayList<SuperAthletes> superAthletesInGame = new ArrayList<SuperAthletes>();
-				CyclingGameParticipator GP = new CyclingGameParticipator(officialInGame, cyclistInGame, superAthletesInGame, cy);
-				data.getCyclingGameList().put(gameID, GP);
-				cyclingMenuControl(gameID, GP);				
+				cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);				
 			}
 //			else if(choice == 2){
 //				runningMenu();
@@ -171,7 +150,10 @@ public class Driver {
 //				ArrayList List= new ArrayList();
 //				gameList.put(gameID, List);
 //			}
-			else if(choice == 4){
+			else if(choice == 4){		
+				if(data.getOfficial() == null){
+					data.setGameType(null);
+				}
 				meanMenuControl();
 			}
 			else{
@@ -203,60 +185,66 @@ public class Driver {
 		System.out.println("---2---Choose the offical-----------------------------------");
 		System.out.println("---3---Back to the game menu--------------------------------");
 	}
-	public void cyclingMenuControl(String gameID, CyclingGameParticipator cyclingGP){
-		
+	public void cyclingMenuControl(String gameID, ArrayList cyclistInGame, ArrayList officialInGame, ArrayList superAthletesInGame){		
 		cyclingMenu();
+		data.setcyclistInGame(cyclistInGame);
+		data.setsuperAthletesInGame(superAthletesInGame);
 		System.out.println("Please enter your commond : ");
 		try{
 			Scanner sc = new Scanner(System.in);
 			int choice = sc.nextInt();
-			int athletesNumber = cyclingGP.getCyclistInGame().size() + cyclingGP.getSuperAthletesInGame().size();
+			int athletesNumber = cyclistInGame.size() + superAthletesInGame.size();
 			if(choice == 1){
 				if(athletesNumber <= 7)
-					cyclistMenuControl(gameID, cyclingGP);
+					cyclistMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				else {
 					System.out.println("The game has 8 athletes already!");
-					cyclingMenuControl(gameID, cyclingGP);
+					cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				}
 			}
 			else if(choice ==2){
-				officialMenuControl(gameID, cyclingGP);				
+				officialMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);				
 			}
 			else if(choice == 3){
-				if(athletesNumber >= 4 && athletesNumber <=8 && cyclingGP.getOfficialInGame().size() == 1)
+				if(athletesNumber >= 4 && athletesNumber <=8 && officialInGame.size() == 1)
 					gameMenuControl();
 				else{
-					checkGameLimitation(gameID, cyclingGP);
+					checkGameLimitation(gameID, cyclistInGame, superAthletesInGame);
 					System.out.println("Would you like to go back to game menu?(yes/no)");
 					Scanner cc = new Scanner(System.in);
 					String backOrNot = cc.nextLine();
 					if(backOrNot.equals("yes")){
-						data.getCyclingGameList().remove(gameID);
+						if(cyclingGameNumber != 1){
+							cyclingGameNumber = 1;
+							data.setCycling(null);;
+							data.setGameType(null);
+							data.setOfficial(null);;
+						}
 						System.out.println("The game has been concled.");
 						gameMenuControl();
 					}
 					else if(backOrNot.equals("no")){
-						cyclingMenuControl(gameID, cyclingGP);
+						cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 					}
 					else {
 						System.out.println("You enter a wrong commond.");
-						cyclistMenuControl(gameID, cyclingGP);
+						cyclistMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 					}
 				}
 			}
 			else{
 				System.out.println("Please enter a number from 1 to 3:");
-				cyclingMenuControl(gameID, cyclingGP);
+				cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 			}
 		} catch(Exception e){
 			System.out.println("Please enter a number from 1 to 3:");
-			cyclingMenuControl(gameID, cyclingGP);
+			cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 		}
 	}
 
-	public void checkGameLimitation(String gameID, CyclingGameParticipator cyclingGP ){
+	public void checkGameLimitation(String gameID, ArrayList cyclistInGame, ArrayList superAthletesInGame){
 		String reason ;
-		int athletesNumber = cyclingGP.getCyclistInGame().size() + cyclingGP.getSuperAthletesInGame().size();
+		int athletesNumber = cyclistInGame.size() + superAthletesInGame.size();
 		if(athletesNumber == 8){
 			System.out.println("The game has 8 athletes so you can't add any athletes!");
 		}
@@ -301,46 +289,7 @@ public class Driver {
 			saNumber++;
 		}
 	}
-	//next method isn't used.
-	public void supperAthletesMenuControl(String gameID, CyclingGameParticipator cyclingGP){
-		int athletesNumber = cyclingGP.getCyclistInGame().size() + cyclingGP.getSuperAthletesInGame().size();
-		//To check the athletes number in the game
-		if(athletesNumber<=7){
-		supperAthletesMenu();
-		System.out.println("Please enter the athletes' ID: ");
-		Scanner sc = new Scanner(System.in);
-		String ID = sc.nextLine();
-		//int athletesNumber = GP.getCyclistInGame().size() + GP.getSuperAthletesInGame().size();
-		if(data.getSuperAthletesList().get(ID) != null && athletesNumber <= 7){
-			cyclingGP.getSuperAthletesInGame().add(data.getSuperAthletesList().get(ID));
-			System.out.println("Would you like to choose another athletes? Please enther 'yes' or 'no' : ");
-			String choose = sc.nextLine();
-			if (choose.equals("yes")){
-				supperAthletesMenuControl(gameID, cyclingGP);
-			}
-			else if(choose.equals("no")){
-				cyclingMenuControl(gameID, cyclingGP);
-			}
-			else{
-				System.out.println("You didn't input the right commond! Back to last menu");
-				cyclingMenuControl(gameID, cyclingGP);
-			}
-		}else if(data.getSuperAthletesList().get(ID) == null ){
-			System.out.println("You the athletes does not exist.");
-			supperAthletesMenuControl(gameID, cyclingGP);
-		}else if(athletesNumber == 8){
-			System.out.println("The game has 8 athleres. You cannot add any more.");
-			cyclingMenuControl(gameID, cyclingGP);
-		}else {
-			System.out.println("The commond cannot be recognized.");
-			cyclingMenuControl(gameID, cyclingGP);
-		}
-		}else{
-			System.out.println("There are 8 athletes in the game. \nYou cannot add athletes.");
-			cyclingMenuControl(gameID, cyclingGP);
-		}
-	}
-	
+
 	public void cyclistMenu(){
 		int cyNumber = 1;		
 		
@@ -355,8 +304,8 @@ public class Driver {
 			cyNumber++;
 		}
 	}
-	public void cyclistMenuControl(String gameID, CyclingGameParticipator cyclingGP){
-		int athletesNumber = cyclingGP.getCyclistInGame().size() + cyclingGP.getSuperAthletesInGame().size();
+	public void cyclistMenuControl(String gameID, ArrayList cyclistInGame, ArrayList officialInGame, ArrayList superAthletesInGame){
+		int athletesNumber = cyclistInGame.size() + superAthletesInGame.size();
 		// To check the athletes in game
 		if (athletesNumber <= 7) {
 			cyclistMenu();
@@ -365,49 +314,51 @@ public class Driver {
 			Scanner sc = new Scanner(System.in);
 			String ID = sc.nextLine();
 			// Check the cyclist is in the list and not in the game.
-			if (data.getCyclistList().get(ID) != null && !cyclingGP.getCyclistInGame().contains(data.getCyclistList().get(ID))) {
-				cyclingGP.getCyclistInGame().add(data.getCyclistList().get(ID));
+			if (data.getCyclistList().get(ID) != null && !cyclistInGame.contains(data.getCyclistList().get(ID))) {
+				cyclistInGame.add(data.getCyclistList().get(ID));
+				System.out.println("Now we have: " + cyclistInGame.size() + " cyclists in the game.");
 				System.out.println("Would you like to choose another athletes? Please enther 'yes' or 'no' : ");
 				String choose = sc.nextLine();
 				if (choose.equals("yes")) {
-					cyclistMenuControl(gameID, cyclingGP);
+					cyclistMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				} else if (choose.equals("no")) {
-					cyclingMenuControl(gameID, cyclingGP);
+					cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				} else {
 					System.out.println("You didn't input the right commond! Back to last menu");
-					cyclingMenuControl(gameID, cyclingGP);
+					cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				}
 			}
 			// To check whether the object that user choose is excist in the
 			// athletesList and an athlete cann't take in a same game twice.
 			else if (data.getSuperAthletesList().get(ID) != null
-					&& !cyclingGP.getSuperAthletesInGame().contains(data.getSuperAthletesList().get(ID))) {
-				cyclingGP.getSuperAthletesInGame().add(data.getSuperAthletesList().get(ID));
+					&& !superAthletesInGame.contains(data.getSuperAthletesList().get(ID))) {
+				superAthletesInGame.add(data.getSuperAthletesList().get(ID));
+				System.out.println("Now, we have: " + superAthletesInGame.size() + " superathletes in the game.");
 				System.out.println("Would you like to choose another athletes? Please enther 'yes' or 'no' : ");
 				String choose = sc.nextLine();
 				if (choose.equals("yes")) {
-					cyclistMenuControl(gameID, cyclingGP);
+					cyclistMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				} else if (choose.equals("no")) {
-					cyclingMenuControl(gameID, cyclingGP);
+					cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				}
 				else{
 					System.out.println("You didn't input the right commond! Back to last menu");
-					cyclingMenuControl(gameID, cyclingGP);
+					cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				}
 			} else if (data.getSuperAthletesList().get(ID) == null && data.getCyclistList().get(ID) == null) {
 				System.out.println("The athlete does not exist!");
-				cyclistMenuControl(gameID, cyclingGP);
-			} else if (cyclingGP.getCyclistInGame().contains(data.getCyclistList().get(ID))
-					|| cyclingGP.getSuperAthletesInGame().contains(data.getSuperAthletesList().get(ID))) {
+				cyclistMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
+			} else if (cyclistInGame.contains(data.getCyclistList().get(ID))
+					|| superAthletesInGame.contains(data.getSuperAthletesList().get(ID))) {
 				System.out.println("The athlete has already in the game, you can't do it twice");
-				cyclistMenuControl(gameID, cyclingGP);
+				cyclistMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 			} else {
 				System.out.println("Something unexcept happen, you will go back to last menu...");
-				cyclistMenuControl(gameID, cyclingGP);
+				cyclistMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 			}
 		} else {
 			System.out.println("There are 8 athletes in the game. \nYou cannot add athletes.");
-			cyclingMenuControl(gameID, cyclingGP);
+			cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 		}
 	}
 
@@ -425,12 +376,12 @@ public class Driver {
 			ocNumber++;
 		}
 	}
-	public void officialMenuControl(String gameID, CyclingGameParticipator cyclingGP){
+	public void officialMenuControl(String gameID, ArrayList cyclistInGame, ArrayList officialInGame, ArrayList superAthletesInGame){
 		//Firstly, check whether there is an officer in the game	
-		if(cyclingGP.getOfficialInGame().size() != 0){
+		if(officialInGame.size() != 0){
 			System.out.println("The game has already have an official.");
 			System.out.println("You cann't add any other official!");
-			cyclingMenuControl(gameID, cyclingGP);
+			cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 		}
 		else{
 			officialMenu();
@@ -438,165 +389,166 @@ public class Driver {
 			Scanner sc = new Scanner(System.in);
 			String ID = sc.nextLine();
 			if(data.getOfficialList().get(ID) != null){
-				cyclingGP.getOfficialInGame().add(data.getSuperAthletesList().get(ID));				
+				officialInGame.add(data.getOfficialList().get(ID));	
+				data.setOfficial((Official) data.getOfficialList().get(ID));
 				System.out.println("Your choice is successfull!");
-				
-				cyclingMenuControl(gameID, cyclingGP);
+				System.out.println("Now we have: " + officialInGame.size() + " official in game.");
+				cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 			} 
 			else {
 				System.out.println("The official is not exist!");
 				System.out.println("Pleas enter it again:");
-				officialMenuControl(gameID, cyclingGP);
+				officialMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 			}
 		}
 	}
-//	public void officialMenuControl(String gameID, RunningGameParticipator rGP){
-//		
-//	}
-//	public void officialMeunControl(String gameID, SwimmingGameParticipator sGP){
-//		
-//	}
+
 	
-	public void predictMenu(){
-		//List all the cycling games
-		System.out.println("We have these games: ");
-		Iterator iter = data.getCyclingGameList().entrySet().iterator();
-		while(iter.hasNext()){
-			HashMap.Entry<String, Cyclist> entry = (Entry<String, Cyclist>)iter.next();
-			System.out.println("game ID : " + entry.getKey() );
-		}
-	}
-	public void predictMenuControl(){
-		int gameNumber = data.getCyclingGameList().size() + data.getRunningGameList().size() + data.getSwimmerList().size();
-		if(gameNumber == 0){
+	//String pridict = null;
+	public void predictMenuControl(){		
+		if(data.getGameType() == null){
 			System.out.println("There are no games.");
 			meanMenu();
 		} else {
-			predictMenu();
-			System.out.println("Please enter the game ID that you want to predict: ");
-			Scanner sc = new Scanner(System.in);
-			String gID = sc.nextLine();
-			//check the game
-			//then call that game's predict
-			if(data.getCyclingGameList().get(gID) != null){
-				predictCyclingGame(gID);
+			System.out.println("Now we have these athletes in the game:");
+			if(data.getGameType().equals("Cycling")){
+				data.printCyclistInGame();
+				data.printSuperAthletesInGame();
+			} 
+			else if(data.getGameType().equals("Swimming")){
+				data.printSwimmerInGame();
+				data.printSuperAthletesInGame();
 			}
-			else if(data.getRunningGameList().get(gID) != null){
-				
-			}
-			else if(data.getSwimmingGameList().get(gID) != null){
-				
-			}
-			else{
-				System.out.println("The game doesn't exist.");
+			else if(data.getGameType().equals("Running")){
+				data.printRunnerInGame();
+				data.printSuperAthletesInGame();
+			} else{
+				System.out.println("Something goes wrong in predictMenuControl!");
 				meanMenuControl();
 			}
 		}
+			predictGame();
+	}
+	public void predictGame(){
+		System.out.println("Please choose an athlete's ID: ");
+		Scanner sc = new Scanner(System.in);
+		String athleteID = sc.nextLine();
+		if(data.getGameType().equals("Cycling")){
+			if(data.getCyclistList().get(athleteID)==null && data.getSuperAthletesList().get(athleteID)==null){
+				System.out.println("The athlete does not exist, please try it again!");
+				predictGame();
+			} else {
+				if(data.getCyclistInGame().contains(data.getCyclistList().get(athleteID)) 
+					|| data.getSuperAthletesInGame().contains(data.getSuperAthletesList().get(athleteID))){
+						data.setPredict(athleteID);
+						System.out.println("You predict " + athleteID + " as winner!");
+						meanMenuControl();
+				} else {
+					System.out.println("The athlete does not exist, please try it again!");
+					predictGame();
+				}
+			}
+		}
+		else if(data.getGameType().equals("Swimming")){
+			if(data.getSwimmerList().get(athleteID)==null && data.getSuperAthletesList().get(athleteID)==null){
+				System.out.println("The athlete does not exist, please try it again!");
+				predictGame();
+			} else {
+				if(data.getSwimmerInGame().contains(data.getSwimmerList().get(athleteID))
+					|| data.getSuperAthletesInGame().contains(data.getSuperAthletesList().get(athleteID))){
+						data.setPredict(athleteID);
+						System.out.println("You predict " + athleteID + " as winner!");
+						meanMenuControl();
+				} else {
+					System.out.println("The athlete does not exist, please try it again!");
+					predictGame();
+				}
+			}
+		} else if(data.getGameType().equals("Running")){
+			if(data.getsprinterList().get(athleteID)==null && data.getSuperAthletesList().get(athleteID)==null){
+				System.out.println("The athlete does not exist, please try it again!");
+				predictGame();
+			} else {
+				if(data.getRunnerInGame().contains(data.getsprinterList().get(athleteID))
+						|| data.getSuperAthletesInGame().contains(data.getSuperAthletesList().get(athleteID))){
+					data.setPredict(athleteID);
+					System.out.println("You predict " + athleteID + " as winner!");
+					meanMenuControl();
+				} else {
+					System.out.println("The athlete does not exist, please try it again!");
+					predictGame();
+				}
+			}
+		} else {
+			System.out.println("There are some error in predictGame!");
+			meanMenuControl();
+		}
 	}
 	
-	public void predictCyclingGame(String gID){
-		if(((CyclingGameParticipator) data.getCyclingGameList().get(gID)).getCyclingGame().getResult() == false){
-			Scanner sc = new Scanner(System.in);
-			if(((CyclingGameParticipator) data.getCyclingGameList().get(gID)).getCyclingGame().getPredict() == null){
-				//print all the athletes in the game
-				((CyclingGameParticipator) data.getCyclingGameList().get(gID)).printAthletes();
-				//choose an athletes
-				
-				System.out.println("Please enter the Athlete's ID to predict the winner: ");
-				String predict = sc.nextLine();
-				if(((CyclingGameParticipator) data.getCyclingGameList().get(gID)).getCyclistInGame() != null || ((CyclingGameParticipator) data.getCyclingGameList().get(gID)).getSuperAthletesInGame() != null){
-					((CyclingGameParticipator) data.getCyclingGameList().get(gID)).getCyclingGame().setPredict(predict);
-					meanMenuControl();
-						
-				}else{
-					System.out.println("The athlete does not exist.");
-					predictCyclingGame(gID);
+	String reStartUse = null;
+	public void startTheGame(){
+		if(data.getGameType() == null){
+			System.out.println("There are no games.");
+			meanMenu();
+		} else {
+			if(reStartUse == null){
+				HashMap<String, Double> result = new HashMap<String, Double>();
+				if(data.getGameType() == "Cycling"){
+					reStartUse = "ran";
+					String gameID = data.getCycling().getGameID();
+					startCycling(gameID, result);
 				}
-				
-			}
-			else if(((CyclingGameParticipator) data.getCyclingGameList().get(gID)).getCyclingGame().getPredict() != null){
-				System.out.println("The game has been predict! Do you want to change your predict?(yes/no)");
-				String choice = sc.nextLine();
-				if(choice.equals("yes")){
-					//print all the athletes in the game
-					((CyclingGameParticipator) data.getCyclingGameList().get(gID)).printAthletes();
-					//choose an athletes
-					String input = "false";
-					do{
-						System.out.println("Please enter the Athlete's ID to predict the winner: ");
-						String predict = sc.nextLine();
-						if(((CyclingGameParticipator) data.getCyclingGameList().get(gID)).getCyclistInGame() != null || ((CyclingGameParticipator) data.getCyclingGameList().get(gID)).getSuperAthletesInGame() != null){
-							((CyclingGameParticipator) data.getCyclingGameList().get(gID)).getCyclingGame().setPredict(predict);
-							input = "true";
-						}
-					}while(input.equals("true"));
+				else if(data.getGameType() == "Running"){
+					
 				}
-				else if(choice.equals("no")){
-					meanMenuControl();
+				else if(data.getGameType() == "Swimming"){
+					
 				}
 				else{
-					System.out.println("Wrong commond!");
+					System.out.println("The game does not exist.");
 					meanMenuControl();
 				}
-			}
-		}
-		else
-			System.out.println("The game is finish. You cann't predict it.");
-	}
-	
-	public void startTheGame(){
-		int gameNumber = data.getCyclingGameList().size() + data.getRunningGameList().size() + data.getSwimmerList().size();
-		if(gameNumber == 0){
-			System.out.println("There are no games.");
-			meanMenu();
-		} else {
-			data.printGameList();
-			System.out.println("Please choose a game to start.");
-			Scanner sc = new Scanner(System.in);
-			System.out.println("Please enter the gameID: ");
-			String gameID = sc.nextLine();
-			HashMap<String, Double> result = new HashMap<String, Double>();
-			if(data.getCyclingGameList().get(gameID) != null){
-				startCycling(gameID, result);
-			}
-			else if(data.getRunningGameList().get(gameID) != null){
-				
-			}
-			else if(data.getSwimmingGameList().get(gameID) != null){
-				
-			}
-			else{
-				System.out.println("The game does not exist.");
-				meanMenuControl();
+			} else {
+				System.out.println("Would you like restart the game?(yes/no)");
+				Scanner sc = new Scanner(System.in);
+				String choice = sc.nextLine();
+				if(choice.equals("yes")){
+					resetPoints();
+					System.out.println("You should reset the prediction first!");
+					reStartUse = null;
+					predictMenuControl();
+				}
+				else if(choice.equals("no"))
+					meanMenuControl();
+				else{
+					System.out.println("You entered wrong commond!");
+					meanMenuControl();
+				}
 			}
 			
 		}
 	}
 	public void startCycling(String gameID, HashMap<String, Double> result){
-		CyclingGameParticipator cGP = (CyclingGameParticipator) data.getCyclingGameList().get(gameID);
-		int athletesNumber = cGP.getCyclistInGame().size() + cGP.getSuperAthletesInGame().size();
+		//CyclingGameParticipator cGP = (CyclingGameParticipator) data.getCyclingGameList().get(gameID);
+		int athletesNumber = data.getCyclistInGame().size() + data.getSuperAthletesInGame().size();
 		double[] rank = new double[athletesNumber];
-		for(int i=0;i<cGP.getCyclistInGame().size();i++){
-			Cyclist c = (Cyclist) cGP.getCyclistInGame().get(i);
-			double time = c.compete(cGP.getCyclingGame().getGameType());
+		for(int i=0;i<data.getCyclistInGame().size();i++){
+			Cyclist c = (Cyclist) data.getCyclistInGame().get(i);
+			double time = c.compete(data.getGameType());
 			String ID = c.getID();
-			System.out.println("test\t" + time + "    " + ID);
 			result.put(ID, time);
 			rank[i] = time;
 		}
 		int j=0;
-		for(int i=cGP.getCyclistInGame().size();i<athletesNumber;i++){
-			System.out.println("test" + cGP.getCyclingGame().getGameType());
-			SuperAthletes s = (SuperAthletes) cGP.getSuperAthletesInGame().get(j);
-			double time = s.compete(cGP.getCyclingGame().getGameType());
+		for(int i=data.getCyclistInGame().size();i<athletesNumber;i++){
+			SuperAthletes s = (SuperAthletes) data.getSuperAthletesInGame().get(j);
+			double time = s.compete(data.getGameType());
 			String ID = s.getID();
-			System.out.println("test\t" + time + "    " + ID);
 			result.put(ID, time);
 			rank[i] = time;
 			j++;
 		}
 		Arrays.sort(rank);
-		System.out.println(rank[0]);
 		String winner = null, second = null, third = null;
 		try{
 		    Thread.sleep(((int) rank[athletesNumber-1])*1);
@@ -622,8 +574,7 @@ public class Driver {
 		System.out.println("The second is: " + second + "\tHis result is: " + rank[1]);
 		System.out.println("The third  is: " + third + "\tHis result is: " + rank[2]);
 		data.getResultList().put(gameID, result);
-		CyclingGameParticipator cyclingGP = (CyclingGameParticipator) data.getCyclingGameList().get(gameID);
-		if(cyclingGP.getCyclingGame().getPredict().equals(winner)){
+		if(data.getPredict().equals(winner)){
 			System.out.println("You win!");
 		}else
 			System.out.println("You loose!");
@@ -674,15 +625,56 @@ public class Driver {
 			sa2.setPoint(1);
 		}
 	}
+	public void resetPoints(){
+		if(data.getGameType() == "Cycling"){
+			resetCyclistPoints();
+		}
+	}
+	public void resetCyclistPoints(){
+		data.getCycling().getGameID();
+		HashMap<String, Double> reset = (HashMap<String, Double>) data.getResultList().get(data.getCycling().getGameID());
+		Iterator iter = reset.entrySet().iterator();
+		Double[] rank = new Double[reset.size()];
+		int i = 0;
+		while(iter.hasNext()){
+			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
+			rank[i] = entry.getValue();
+			i++;
+		}
+		Arrays.sort(rank);
+		iter = reset.entrySet().iterator();
+		while(iter.hasNext()){
+			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
+			if(entry.getValue() == rank[0] && data.getCyclistList().containsKey(entry.getKey())){
+				((Cyclist) data.getCyclistList().get(entry.getKey())).setPoint(-5);;
+			}
+			if(entry.getValue() == rank[1] && data.getCyclistList().containsKey(entry.getKey())){
+				((Cyclist) data.getCyclistList().get(entry.getKey())).setPoint(-2);;
+			}
+			if(entry.getValue() == rank[2] && data.getCyclistList().containsKey(entry.getKey())){
+				((Cyclist) data.getCyclistList().get(entry.getKey())).setPoint(-1);;
+			}
+			if(entry.getValue() == rank[0] && data.getSuperAthletesList().containsKey(entry.getKey())){
+				((SuperAthletes) data.getSuperAthletesList().get(entry.getKey())).setPoint(-5);;
+			}
+			if(entry.getValue() == rank[1] && data.getSuperAthletesList().containsKey(entry.getKey())){
+				((SuperAthletes) data.getSuperAthletesList().get(entry.getKey())).setPoint(-2);;
+			}
+			if(entry.getValue() == rank[2] && data.getSuperAthletesList().containsKey(entry.getKey())){
+				((SuperAthletes) data.getSuperAthletesList().get(entry.getKey())).setPoint(-1);;
+			}
+		}
+	}
+	
 	
 	public void desplayAllGameResults(){
 		if(data.getResultList().size()!=0){
 			Iterator iter = data.getResultList().entrySet().iterator();		
 			while (iter.hasNext()){
 				HashMap.Entry<String, HashMap<String, Double>> entry = (Entry<String, HashMap<String, Double>>)iter.next();
-				System.out.println("Test\t" + entry.getKey());
 				printResults(entry.getKey());
 			}
+			meanMenuControl();
 		} else {
 			System.out.println("There are not any game has been finished!");
 			meanMenuControl();
@@ -690,7 +682,6 @@ public class Driver {
 	}
 	
 	public void printResults(String gameID){
-		System.out.println("Test\t" + gameID);
 		HashMap<String, Double> result = (HashMap<String, Double>) data.getResultList().get(gameID);
 		Double[] rank = new Double[result.size()];
 		int i = 0;
@@ -699,16 +690,13 @@ public class Driver {
 			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
 			//System.out.println("ID" + entry.getKey() + "time" + entry.getValue());
 			rank[i] = entry.getValue();
-			System.out.println("test 1 \t" + rank[i]);
 			i++;		
 		}
-		System.out.println("test2");
 		Arrays.sort(rank);
-		String winner = null, second = null, third = null, referee = null;
-		String winnerName = null, seconderName = null, thirderName = null, refereeName = null;
+		String winner = null, second = null, third = null, referee;
+		String winnerName = null, seconderName = null, thirderName = null, refereeName;
 		iter = result.entrySet().iterator();
 		while (iter.hasNext()){
-			System.out.println("test3");
 			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
 			if(rank[0]==entry.getValue()){
 				winner = entry.getKey();
@@ -720,39 +708,17 @@ public class Driver {
 				third = entry.getKey();
 			}
 		}
-		System.out.println("Test3" + winner + "\t" + winnerName);
 		winnerName = getAthletesName(winner, winnerName);
-		System.out.println("Test4" + winner + "\t" + winnerName);
 		seconderName = getAthletesName(second, seconderName);
 		thirderName = getAthletesName(third, thirderName);
-//		referee = getOfficialDetails(gameID,referee);
-//		System.out.println("Test5" + referee);
-//		if(data.getCyclingGameList().get(gameID) != null){
-//			System.out.println("Test5");
-//			CyclingGameParticipator cgp = (CyclingGameParticipator) data.getCyclingGameList().get(gameID);
-//			Official o = (Official) cgp.getOfficialInGame().get(0);
-//			referee = o.getID();
-//			refereeName = o.getName();
-//			System.out.println("Test 6 : " + referee + "     " + refereeName);
-//		}
-//		else if(data.getSwimmingGameList().get(gameID) != null){
-//			SwimmingGameParticipator sgp = (SwimmingGameParticipator) data.getSwimmingGameList().get(gameID);
-//			Official o = (Official) sgp.getOfficialInGame().get(0);
-//			referee = o.getID();
-//			refereeName = o.getName();
-//		} else {
-//			RunningGameParticipator rgp = (RunningGameParticipator) data.getRunningGameList().get(gameID);
-//			Official o = (Official) rgp.getOfficialInGame().get(0);
-//			referee = o.getID();
-//			refereeName = o.getName();
-//		}
-		System.out.println("GameID: " + gameID);
-		CyclingGameParticipator cp = (CyclingGameParticipator) data.getCyclingGameList().get(gameID);
-//		cp.printOfficial();
-		System.out.println("RefereeID: " + referee + "Referee's Name: " + refereeName);
-		System.out.println("WinnerID: " + winner + "Winner's Name: " + winnerName + "Result: " + rank[0]);
-		System.out.println("SeconderID: " + winner + "seconder's Name: " + seconderName + "Result: " + rank[1]);
-		System.out.println("ThirderID: " + winner + "thirder's Name: " + thirderName + "Result: " + rank[2]);
+		referee = data.getOfficial().getID();
+		refereeName = data.getOfficial().getName();
+		
+		System.out.println("GameID:\t" + gameID);
+		System.out.println("\tRefereeID:\t" + referee + "\tReferee's Name:\t" + refereeName);
+		System.out.println("\tWinnerID:\t" + winner + "\tWinner's Name:\t" + winnerName + "\tResult:\t" + rank[0]);
+		System.out.println("\tSeconderID:\t" + winner + "\tseconder's Name:" + seconderName + "\tResult:\t" + rank[1]);
+		System.out.println("\tThirderID:\t" + winner + "\tthirder's Name:\t" + thirderName + "\tResult:\t" + rank[2]);
 	}
 	
 	public String getAthletesName(String ID, String Name){
@@ -769,53 +735,36 @@ public class Driver {
 			Name = r.getName();
 		}
 		else {
-			SuperAthletes first = (SuperAthletes) data.getCyclistList().get(ID);
+			SuperAthletes first = (SuperAthletes) data.getSuperAthletesList().get(ID);
 			Name = first.getName();
 		}
 		return Name;
 	}
 	
 	
-	public String getOfficialDetails(String gameID, String officialID){
-		if(data.getCyclingGameList().get(gameID) != null){
-			CyclingGameParticipator cgp = (CyclingGameParticipator) data.getCyclingGameList().get(gameID);
-			Official o = (Official) cgp.getOfficialInGame().get(0);
-			officialID = o.getID();
-			String Name = o.getName();
-		}
-		else if(data.getSwimmingGameList().get(gameID) != null){
-			SwimmingGameParticipator sgp = (SwimmingGameParticipator) data.getSwimmingGameList().get(gameID);
-			Official o = (Official) sgp.getOfficialInGame().get(0);
-			officialID = o.getID();
-			String Name = o.getName();
-		} else {
-			RunningGameParticipator rgp = (RunningGameParticipator) data.getRunningGameList().get(gameID);
-			Official o = (Official) rgp.getOfficialInGame().get(0);
-			officialID = o.getID();
-			String Name = o.getName();
-		}
-		return officialID;
-	}
-	
 	public void displayPointsOfAllAthletes(){
+		//All cyclists points
 		Iterator iter = data.getCyclistList().entrySet().iterator();		
 		while (iter.hasNext()){
 			HashMap.Entry<String, Cyclist> entry = (Entry<String, Cyclist>)iter.next();
 			System.out.println("Cyclist ID : " + entry.getKey() + "\tCyclist Name : " 
 					+ entry.getValue().getName() + "\tCyclist points : " + entry.getValue().getPoint());
 		}
+		//All swimmer points
 		iter = data.getSwimmerList().entrySet().iterator();		
 		while (iter.hasNext()){
 			HashMap.Entry<String, Swimmer> entry = (Entry<String, Swimmer>)iter.next();
 			System.out.println("Swimmer ID : " + entry.getKey() + "\tSwimmer Name : " 
 					+ entry.getValue().getName() + "\tSwimmer points : " + entry.getValue().getPoint());
 		}
+		//All sprinter points
 		iter = data.getsprinterList().entrySet().iterator();		
 		while (iter.hasNext()){
 			HashMap.Entry<String, Sprinter> entry = (Entry<String, Sprinter>)iter.next();
 			System.out.println("Sprinter ID : " + entry.getKey() + "\tSprinter Name : " 
 					+ entry.getValue().getName() + "\tSprinter points : " + entry.getValue().getPoint());
 		}
+		//all superathlete points
 		iter = data.getSuperAthletesList().entrySet().iterator();		
 		while (iter.hasNext()){
 			HashMap.Entry<String, SuperAthletes> entry = (Entry<String, SuperAthletes>)iter.next();
@@ -827,16 +776,4 @@ public class Driver {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
-
-
-

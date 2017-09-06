@@ -1,6 +1,6 @@
-package Assignment1;
 
 public abstract class Game {
+
 	private String gameID;
 	private boolean result = false;
 	private String gameType;
@@ -38,7 +38,7 @@ public abstract class Game {
 		predict = pd;
 	}
 	
-	public abstract void setGameID();
+	public abstract void setGameID(String gameID);
 	
 	public abstract boolean checkAthletes();
 	

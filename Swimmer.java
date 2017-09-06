@@ -1,6 +1,6 @@
-package Assignment1;
 
-public class Swimmer extends Athletes {
+public class Swimmer extends Athletes{
+	
 	private String ID;
 	private String name;
 	private String age;
@@ -16,5 +16,6 @@ public class Swimmer extends Athletes {
 		double time = (1 + Math.random()) * 100;
 		return time;
 	}
+
 
 }

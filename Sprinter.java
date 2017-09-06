@@ -1,4 +1,3 @@
-package Assignment1;
 
 public class Sprinter extends Athletes{
 	private String ID;
@@ -17,5 +16,6 @@ public class Sprinter extends Athletes{
 		double time = (1 + Math.random()) * 10;
 		return time;
 	}
+
 
 }

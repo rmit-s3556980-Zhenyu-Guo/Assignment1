@@ -1,18 +1,30 @@
-package Assignment1;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class Data {
+
 	private HashMap<String, Sprinter> sprinterList = new HashMap<String, Sprinter>();
 	private HashMap<String, Swimmer> swimmerList = new HashMap<String, Swimmer>();
 	private HashMap<String, Cyclist> cyclistList = new HashMap<String, Cyclist>();
 	private HashMap<String, Official> officialList = new HashMap<String, Official>();
 	private HashMap<String, SuperAthletes> superAthletesList = new HashMap<>();
-	private HashMap<String, RunningGameParticipator> runningGameList = new HashMap<String, RunningGameParticipator>();
-	private HashMap<String, CyclingGameParticipator> cyclingGameList = new HashMap<String, CyclingGameParticipator>();
-	private HashMap<String, SwimmingGameParticipator> swimmingGameList = new HashMap<String, SwimmingGameParticipator>();
 	private HashMap<String, HashMap<String, Double>> resultList = new HashMap<String, HashMap<String, Double>>();
+	
+	private ArrayList<Cyclist> cyclistInGame = new ArrayList<Cyclist>();
+	private ArrayList<SuperAthletes> superAthletesInGame = new ArrayList<SuperAthletes>();
+	private ArrayList<Swimmer> swimmerInGame = new ArrayList<Swimmer>();
+	private ArrayList<Sprinter> runnerInGame = new ArrayList<Sprinter>();
+	
+	private Swimming s;
+	private Running r;
+	private Cycling c;
+	private Official o;
+	
+	private String gameType;
+	private String pridict;
+	
 	
 	public void Officer(){
 		officialList.put("a1", new Official("a1", "bowen", "cc", "dd"));
@@ -41,6 +53,70 @@ public class Data {
 		
 	}
 	
+	public Swimming getSwimming(){
+		return s;
+	}
+	public Running getRunning(){
+		return r;
+	}
+	public Cycling getCycling(){
+		return c;
+	}
+	public Official getOfficial(){
+		return o;
+	}
+	public String getGameType(){
+		return gameType;
+	}
+	public String getPredict(){
+		return pridict;
+	}
+	
+	public void setSwimming(Swimming s){
+		this.s = s;
+	}
+	public void setRunning(Running r){
+		this.r = r;
+	}
+	public void setCycling(Cycling c){
+		this.c = c;
+	}
+	public void setOfficial(Official o){
+		this.o = o;
+	}
+	public void setGameType(String sGT){
+		gameType = sGT;
+	}
+	public void setPredict(String pridict){
+		this.pridict = pridict;
+	}
+	
+	public void setcyclistInGame(ArrayList<Cyclist> cIG){
+		cyclistInGame = cIG ;
+	}
+	public void setsuperAthletesInGame(ArrayList<SuperAthletes> saIG){
+		superAthletesInGame = saIG;
+	}
+	public void setSwimmerInGame(ArrayList<Swimmer> sIG){
+		swimmerInGame = sIG;
+	}
+	public void setRunnerInGame(ArrayList<Sprinter> rIG){
+		runnerInGame = rIG;
+	}
+	
+	public ArrayList getCyclistInGame(){
+		return cyclistInGame;
+	}
+	public ArrayList getSuperAthletesInGame(){
+		return superAthletesInGame;
+	}
+	public ArrayList getSwimmerInGame(){
+		return swimmerInGame;
+	}
+	public ArrayList getRunnerInGame(){
+		return runnerInGame;
+	}
+	
 	public HashMap getsprinterList(){
 		return sprinterList;
 	}
@@ -56,36 +132,39 @@ public class Data {
 	public HashMap getSuperAthletesList(){
 		return superAthletesList;
 	}
-	public HashMap getRunningGameList(){
-		return runningGameList;
-	}
-	public HashMap getCyclingGameList(){
-		return cyclingGameList;
-	}
-	public HashMap getSwimmingGameList(){
-		return swimmingGameList;
-	}
 	public HashMap getResultList(){
 		return resultList;
 	}
 	
-	public void printGameList(){
-		Iterator iter = cyclingGameList.entrySet().iterator();		
-		while (iter.hasNext()){
-			HashMap.Entry<String, CyclingGameParticipator> entry = (Entry<String, CyclingGameParticipator>)iter.next();
-			System.out.println("Game ID : " + entry.getKey());
-		}
-		iter = swimmingGameList.entrySet().iterator();
-		while (iter.hasNext()){
-			HashMap.Entry<String, SwimmingGameParticipator> entry = (Entry<String, SwimmingGameParticipator>)iter.next();
-			System.out.println("Game ID : " + entry.getKey());
-		}
-		iter = runningGameList.entrySet().iterator();
-		while (iter.hasNext()){
-			HashMap.Entry<String, RunningGameParticipator> entry = (Entry<String, RunningGameParticipator>)iter.next();
-			System.out.println("Game ID : " + entry.getKey());
+	public void printCyclistInGame(){
+		for(int i = 0; i < cyclistInGame.size(); i++){
+			System.out.println("Cyclist ID: \t" + cyclistInGame.get(i).getID());
 		}
 	}
-
+	public void printSuperAthletesInGame(){
+		for(int i = 0; i < superAthletesInGame.size(); i++){
+			System.out.println("Cyclist ID: \t" + superAthletesInGame.get(i).getID());
+		}
+	}
+	public void printSwimmerInGame(){
+		for(int i = 0; i < swimmerInGame.size(); i++){
+			System.out.println("Cyclist ID: \t" + swimmerInGame.get(i).getID());
+		}
+	}
+	public void printRunnerInGame(){
+		for(int i = 0; i < runnerInGame.size(); i++){
+			System.out.println("Cyclist ID: \t" + runnerInGame.get(i).getID());
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

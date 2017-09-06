@@ -1,6 +1,6 @@
-package Assignment1;
 
 public class Swimming extends Game{
+
 	private String gameID;
 	private boolean result = false;
 	private String gameType;
@@ -12,7 +12,7 @@ public class Swimming extends Game{
 	}
 
 	@Override
-	public void setGameID() {
+	public void setGameID(String gameID) {
 		// TODO Auto-generated method stub
 		
 	}
