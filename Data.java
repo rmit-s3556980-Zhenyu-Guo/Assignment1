@@ -43,14 +43,25 @@ public class Data {
 		superAthletesList.put("SA06", new SuperAthletes("SA06", "ds", "asdff", "fa", 0));
 	}
 	public void Cyclist(){
-		cyclistList.put("c1", new Cyclist("c1", "bq", "ff", "aa", 0));
-		cyclistList.put("c2", new Cyclist("c2", "bq", "ff", "aa", 0));
-		cyclistList.put("c3", new Cyclist("c3", "bq", "ff", "aa", 0));
-		cyclistList.put("c4", new Cyclist("c4", "bq", "ff", "aa", 0));
-		cyclistList.put("c5", new Cyclist("c5", "bq", "ff", "aa", 0));
-		cyclistList.put("c6", new Cyclist("c6", "bq", "ff", "aa", 0));
-		cyclistList.put("c7", new Cyclist("c7", "bq", "ff", "aa", 0));
+		cyclistList.put("c1", new Cyclist("c1", "1", "ff", "aa", 0));
+		cyclistList.put("c2", new Cyclist("c2", "2", "ff", "aa", 0));
+		cyclistList.put("c3", new Cyclist("c3", "3", "ff", "aa", 0));
+		cyclistList.put("c4", new Cyclist("c4", "4", "ff", "aa", 0));
+		cyclistList.put("c5", new Cyclist("c5", "5", "ff", "aa", 0));
+		cyclistList.put("c6", new Cyclist("c6", "6", "ff", "aa", 0));
+		cyclistList.put("c7", new Cyclist("c7", "7", "ff", "aa", 0));
 		
+	}
+	public void Sprinter(){
+		sprinterList.put("r1", new Sprinter("r1", "1", "ff", "aa", 0));
+		sprinterList.put("r2", new Sprinter("r2", "2", "ff", "aa", 0));
+		sprinterList.put("r3", new Sprinter("r3", "3", "ff", "aa", 0));
+		sprinterList.put("r4", new Sprinter("r4", "4", "ff", "aa", 0));
+		sprinterList.put("r5", new Sprinter("r5", "5", "ff", "aa", 0));
+		sprinterList.put("r6", new Sprinter("r6", "6", "ff", "aa", 0));
+		sprinterList.put("r7", new Sprinter("r7", "7", "ff", "aa", 0));
+		sprinterList.put("r8", new Sprinter("r8", "8", "ff", "aa", 0));
+		sprinterList.put("r9", new Sprinter("r9", "9", "ff", "aa", 0));
 	}
 	
 	public Swimming getSwimming(){
