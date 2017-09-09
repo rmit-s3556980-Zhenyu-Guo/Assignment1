@@ -1,3 +1,4 @@
+import java.util.HashMap;
 
 public abstract class Game {
 
@@ -30,18 +31,5 @@ public abstract class Game {
 		return result;
 	}
 	
-	public void setResult(){
-		result = true;
-	}
-	
-	public void setPredict(String pd){
-		predict = pd;
-	}
-	
-	public abstract void setGameID(String gameID);
-	
-	public abstract boolean checkAthletes();
-	
-	public abstract boolean checkOfficial();
-	
+	public abstract void resetPoints(Data data);
 }

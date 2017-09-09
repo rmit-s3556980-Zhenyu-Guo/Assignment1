@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class SuperAthletes extends Athletes{
@@ -29,6 +30,9 @@ public class SuperAthletes extends Athletes{
 		}
 		else
 			System.out.println("Something wrong with the type!");
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		String convertDouble = decimalFormat.format(time);
+		time = Double.parseDouble(convertDouble);
 		return time;
 	}
 }

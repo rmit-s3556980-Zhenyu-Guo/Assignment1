@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 
 public class Swimmer extends Athletes{
 	
@@ -14,6 +15,9 @@ public class Swimmer extends Athletes{
 	@Override
 	public double compete(String type) {
 		double time = (1 + Math.random()) * 100;
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		String convertDouble = decimalFormat.format(time);
+		time = Double.parseDouble(convertDouble);
 		return time;
 	}
 

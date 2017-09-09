@@ -1,48 +1,24 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Map.Entry;
 
 public class Driver {
 
-Data data = new Data();
-	
-	
-	int dataInsert = 0;
-	public void Officer(){
-		data.getOfficialList().put("a1", new Official("a1", "bowen", "cc", "dd"));
-		data.getOfficialList().put("a2", new Official("a2", "cc", "cc", "dd"));
-		data.getOfficialList().put("a3", new Official("a3", "yu", "cc", "dd"));
-		data.getOfficialList().put("a4", new Official("a4", "elva", "cc", "dd"));
-		data.getOfficialList().put("a5", new Official("a5", "bb", "cc", "dd"));
-		data.getOfficialList().put("a6", new Official("a6", "ab", "cc", "dd"));		
-	}
-	public void SuperAthletes(){
-		data.getSuperAthletesList().put("SA01", new SuperAthletes("SA01", "ds", "asdff", "fa", 0));
-		data.getSuperAthletesList().put("SA02", new SuperAthletes("SA02", "ds", "asdff", "fa", 0));
-		data.getSuperAthletesList().put("SA03", new SuperAthletes("SA03", "ds", "asdff", "fa", 0));
-		data.getSuperAthletesList().put("SA04", new SuperAthletes("SA04", "ds", "asdff", "fa", 0));
-		data.getSuperAthletesList().put("SA05", new SuperAthletes("SA05", "ds", "asdff", "fa", 0));
-		data.getSuperAthletesList().put("SA06", new SuperAthletes("SA06", "ds", "asdff", "fa", 0));
-	}
-	public void Cyclist(){
-		data.getCyclistList().put("c1", new Cyclist("c1", "bq", "ff", "aa", 0));
-		data.getCyclistList().put("c2", new Cyclist("c2", "bq", "ff", "aa", 0));
-		data.getCyclistList().put("c3", new Cyclist("c3", "bq", "ff", "aa", 0));
-		data.getCyclistList().put("c4", new Cyclist("c4", "bq", "ff", "aa", 0));
-		data.getCyclistList().put("c5", new Cyclist("c5", "bq", "ff", "aa", 0));
-		data.getCyclistList().put("c6", new Cyclist("c6", "bq", "ff", "aa", 0));
-		data.getCyclistList().put("c7", new Cyclist("c7", "bq", "ff", "aa", 0));
-		
-	}
-	
+	private Data data = new Data();	
+	private int dataInsert = 0;
 	//the first layer
 	public void meanMenu(){
 		if(dataInsert==0){
 			data.Officer();
 			data.Cyclist();
+			data.Swimmer();
 			data.Sprinter();
 			data.SuperAthletes();
 			dataInsert++;
@@ -56,7 +32,6 @@ Data data = new Data();
 		System.out.println("---5---Display the points of all athletes-------");
 		System.out.println("---6---Exit-------------------------------------");
 	}
-	
 	public void meanMenuControl(){
 		meanMenu();		
 		try{
@@ -105,19 +80,13 @@ Data data = new Data();
 		System.out.println("---3---Swimming-----------------");
 		System.out.println("---4---Back to mean menu--------");
 	}
-	
-	
+		
 	//these three variables is used for gameID
 	private int cyclingGameNumber = 1;
 	private int runningGameNumber = 1;
-	//private int swimmingGameNumber = 1;
-//	private Swimming s;
-//	private Running r;
-//	private Cycling c;
-//	private Official o;
-//	private String gameType;
+	private int swimmingGameNumber = 1;
+	private String reStartUse = null;
 	
-	String reStartUse = null;
 	public void gameMenuControl(){
 		
 		gameMenu();
@@ -149,13 +118,18 @@ Data data = new Data();
 				ArrayList<SuperAthletes> superAthletesInGame = new ArrayList<SuperAthletes>();
 				runningMenuControl(gameID, runnerInGame, officialInGame, superAthletesInGame);				
 			}
-//			else if(choice == 3){
-//				swimmingMenu();
-//				String gameID = "S" + Integer.toString(SwimmingGameNumber);
-//				SwimmingGameNumber++;
-//				ArrayList List= new ArrayList();
-//				gameList.put(gameID, List);
-//			}
+			else if(choice == 3){
+				reStartUse = null;
+				String gameID = "S" + Integer.toString(swimmingGameNumber);
+				swimmingGameNumber++;
+				Swimming swimming = new Swimming(gameID, "Swimming", false, null);
+				data.setSwimming(swimming);
+				data.setGameType("Swimming");
+				ArrayList<Swimmer> swimmerInGame = new ArrayList<Swimmer>();
+				ArrayList<Official> officialInGame = new ArrayList<Official>();
+				ArrayList<SuperAthletes> superAthletesInGame = new ArrayList<SuperAthletes>();
+				swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);	
+			}
 			else if(choice == 4){		
 				if(data.getOfficial() == null){
 					data.setGameType(null);
@@ -201,7 +175,7 @@ Data data = new Data();
 				officialMenuControl(gameID, runnerInGame, officialInGame, superAthletesInGame);				
 			}
 			else if(choice == 3){
-				if(athletesNumber >= 4 && athletesNumber <=8 && officialInGame.size() == 1)
+				if(athletesNumber >= 5 && athletesNumber <=8 && officialInGame.size() == 1)
 					gameMenuControl();
 				else{
 					checkGameLimitation(gameID, runnerInGame, superAthletesInGame);
@@ -210,7 +184,6 @@ Data data = new Data();
 					String backOrNot = cc.nextLine();
 					if(backOrNot.equals("yes")){
 						if(runningGameNumber != 1){
-//make changes here! used to be runningGameNumber = 1
 							runningGameNumber = runningGameNumber-1;
 							data.setRunning(null);;
 							data.setGameType(null);
@@ -266,7 +239,7 @@ Data data = new Data();
 				officialMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);				
 			}
 			else if(choice == 3){
-				if(athletesNumber >= 4 && athletesNumber <=8 && officialInGame.size() == 1)
+				if(athletesNumber >= 5 && athletesNumber <=8 && officialInGame.size() == 1)
 					gameMenuControl();
 				else{
 					checkGameLimitation(gameID, cyclistInGame, superAthletesInGame);
@@ -308,8 +281,8 @@ Data data = new Data();
 		if(athletesNumber == 8){
 			System.out.println("The game has 8 athletes so you can't add any athletes!");
 		}
-		else if(athletesNumber < 4){
-			System.out.println("There are less then 4 athletes in the game. \nIf you go back to game menu, this game will be concled.");
+		else if(athletesNumber < 5){
+			System.out.println("There are less then 5 athletes in the game. \nIf you go back to game menu, this game will be concled.");
 		}
 		else{
 			System.out.println("There are no official in the game. \nIf you go back to game menu, this game will be concled.");
@@ -323,29 +296,80 @@ Data data = new Data();
 		System.out.println("---2---Choose the offical------------------------------------");
 		System.out.println("---3---Back to the game menu---------------------------------");
 	}
-	public void swimmingMenuControl(String gameID, ArrayList list){
-		
+	public void swimmingMenuControl(String gameID, ArrayList swimmerInGame, ArrayList officialInGame, ArrayList superAthletesInGame){
+		swimmingMenu();
+		data.setSwimmerInGame(swimmerInGame);
+		data.setsuperAthletesInGame(superAthletesInGame);
+		System.out.println("Please enter your commond : ");
+		try{
+			Scanner sc = new Scanner(System.in);
+			int choice = sc.nextInt();
+			int athletesNumber = swimmerInGame.size() + superAthletesInGame.size();
+			if(choice == 1){
+				if(athletesNumber <= 7)
+					swimmerMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+				else {
+					System.out.println("The game has 8 athletes already!");
+					swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+				}
+			}
+			else if(choice ==2){
+				officialMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);				
+			}
+			else if(choice == 3){
+				if(athletesNumber >= 5 && athletesNumber <=8 && officialInGame.size() == 1)
+					gameMenuControl();
+				else{
+					checkGameLimitation(gameID, swimmerInGame, superAthletesInGame);
+					System.out.println("Would you like to go back to game menu?(yes/no)");
+					Scanner cc = new Scanner(System.in);
+					String backOrNot = cc.nextLine();
+					if(backOrNot.equals("yes")){
+						if(swimmingGameNumber != 1){
+							swimmingGameNumber = swimmingGameNumber - 1;
+							data.setSwimming(null);
+							data.setGameType(null);
+							data.setOfficial(null);
+						}
+						System.out.println("The game has been concled.");
+						gameMenuControl();
+					}
+					else if(backOrNot.equals("no")){
+						swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+					}
+					else {
+						System.out.println("You enter a wrong commond.");
+						swimmerMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+					}
+				}
+			}
+			else{
+				System.out.println("Please enter a number from 1 to 3:");
+				swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+			}
+		} catch(Exception e){
+			System.out.println("Please enter a number from 1 to 3:");
+			swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+		}
 	}
 	
 	//the last layer ------ runner, swimmer, cyclist, superathlete, official
 	public void runnerMenu(){
-		int rNumber = 1;		
-		
-		System.out.println("Now, we have these runners :");
-		
 		//To print all the runner in the list
 		Iterator iter = data.getsprinterList().entrySet().iterator();
 		while(iter.hasNext()){
 			HashMap.Entry<String, Sprinter> entry = (Entry<String, Sprinter>)iter.next();
-			System.out.println(rNumber + ". Sprinter ID : " + entry.getKey() + "\tSprinter Name : " 
+			System.out.println("Sprinter ID :\t" + entry.getKey() + "\tSprinter Name :\t" 
 					+ entry.getValue().getName());
-			rNumber++;
 		}
 	}	
 	public void runnerMenuControl(String gameID, ArrayList runnerInGame, ArrayList officialInGame, ArrayList superAthletesInGame){
 		int athletesNumber = runnerInGame.size() + superAthletesInGame.size();
 		// To check the athletes in game
 		if (athletesNumber <= 7) {
+			System.out.println("Now, we have these athletes :");
+			cyclistMenu();
+			swimmerMenu();
 			runnerMenu();
 			supperAthletesMenu();
 			System.out.println("Please enter the athletes' ID: ");
@@ -383,6 +407,9 @@ Data data = new Data();
 					System.out.println("You didn't input the right commond! Back to last menu");
 					runningMenuControl(gameID, runnerInGame, officialInGame, superAthletesInGame);
 				}
+			} else if(data.getCyclistList().get(ID) !=null || data.getSwimmerList().get(ID) != null){
+				System.out.println("Only Sprinters and superathletes can participate in running!");
+				runnerMenuControl(gameID, runnerInGame, officialInGame, superAthletesInGame);
 			} else if (data.getSuperAthletesList().get(ID) == null && data.getsprinterList().get(ID) == null) {
 				System.out.println("The athlete does not exist!");
 				runnerMenuControl(gameID, runnerInGame, officialInGame, superAthletesInGame);
@@ -402,42 +429,105 @@ Data data = new Data();
 	
 	
 	public void swimmerMenu(){
-		
+		//To print all the cyclists in the list
+		Iterator iter = data.getSwimmerList().entrySet().iterator();
+		while(iter.hasNext()){
+			HashMap.Entry<String, Swimmer> entry = (Entry<String, Swimmer>)iter.next();
+			System.out.println("swimmer ID :\t" + entry.getKey() + "\tswimmer Name :\t" 
+					+ entry.getValue().getName());
+		}
+	}
+	public void swimmerMenuControl(String gameID, ArrayList swimmerInGame, ArrayList officialInGame, ArrayList superAthletesInGame){
+		int athletesNumber = swimmerInGame.size() + superAthletesInGame.size();
+		// To check the athletes in game
+		if (athletesNumber <= 7) {
+			System.out.println("Now, we have these athletes :");
+			runnerMenu();
+			cyclistMenu();
+			swimmerMenu();
+			supperAthletesMenu();
+			System.out.println("Please enter the athletes' ID: ");
+			Scanner sc = new Scanner(System.in);
+			String ID = sc.nextLine();
+			// Check the cyclist is in the list and not in the game.
+			if (data.getSwimmerList().get(ID) != null && !swimmerInGame.contains(data.getSwimmerList().get(ID))) {
+				swimmerInGame.add(data.getSwimmerList().get(ID));
+				System.out.println("Now we have: " + swimmerInGame.size() + " swimmers in the game.");
+				System.out.println("Would you like to choose another athletes? Please enther 'yes' or 'no' : ");
+				String choose = sc.nextLine();
+				if (choose.equals("yes")) {
+					swimmerMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+				} else if (choose.equals("no")) {
+					swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+				} else {
+					System.out.println("You didn't input the right commond! Back to last menu");
+					swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+				}
+			}
+			// To check whether the object that user choose is excist in the
+			// athletesList and an athlete cann't take in a same game twice.
+			else if (data.getSuperAthletesList().get(ID) != null
+					&& !superAthletesInGame.contains(data.getSuperAthletesList().get(ID))) {
+				superAthletesInGame.add(data.getSuperAthletesList().get(ID));
+				System.out.println("Now, we have: " + superAthletesInGame.size() + " superathletes in the game.");
+				System.out.println("Would you like to choose another athletes? Please enther 'yes' or 'no' : ");
+				String choose = sc.nextLine();
+				if (choose.equals("yes")) {
+					swimmerMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+				} else if (choose.equals("no")) {
+					swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+				}
+				else{
+					System.out.println("You didn't input the right commond! Back to last menu");
+					swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+				}
+			}else if(data.getsprinterList().get(ID) != null || data.getCyclistList().get(ID) != null){ 
+				System.out.println("Only cyclist and superathletes can participate in the cycling!");
+				swimmerMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+			}else if (data.getSuperAthletesList().get(ID) == null && data.getCyclistList().get(ID) == null) {
+				System.out.println("The athlete does not exist!");
+				swimmerMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+			} else if (swimmerInGame.contains(data.getSwimmerList().get(ID))
+					|| superAthletesInGame.contains(data.getSuperAthletesList().get(ID))) {
+				System.out.println("The athlete has already in the game, you can't do it twice");
+				swimmerMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+			} else {
+				System.out.println("Something unexcept happen, you will go back to last menu...");
+				swimmerMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+			}
+		} else {
+			System.out.println("There are 8 athletes in the game. \nYou cannot add athletes.");
+			swimmingMenuControl(gameID, swimmerInGame, officialInGame, superAthletesInGame);
+		}
 	}
 	
+	
 	public void supperAthletesMenu(){
-		int saNumber = 1;		
-		
-		System.out.println("And we have these superathletes :");
-		
 		//To print all the superathletes in the list
 		Iterator iter = data.getSuperAthletesList().entrySet().iterator();
 		while(iter.hasNext()){
 			HashMap.Entry<String, SuperAthletes> entry = (Entry<String, SuperAthletes>)iter.next();
-			System.out.println(saNumber + ". superathlete ID : " + entry.getKey() + "\tsuperathlete Name : " 
+			System.out.println("superathlete ID : " + entry.getKey() + "\tsuperathlete Name :" 
 					+ entry.getValue().getName());
-			saNumber++;
 		}
 	}
 
-	public void cyclistMenu(){
-		int cyNumber = 1;		
-		
-		System.out.println("Now, we have these cyclists :");
-		
+	public void cyclistMenu(){		
 		//To print all the cyclists in the list
 		Iterator iter = data.getCyclistList().entrySet().iterator();
 		while(iter.hasNext()){
 			HashMap.Entry<String, Cyclist> entry = (Entry<String, Cyclist>)iter.next();
-			System.out.println(cyNumber + ". cyclist ID : " + entry.getKey() + "\tcyclist Name : " 
+			System.out.println("cyclist ID :\t" + entry.getKey() + "\tcyclist Name :\t" 
 					+ entry.getValue().getName());
-			cyNumber++;
 		}
 	}
 	public void cyclistMenuControl(String gameID, ArrayList cyclistInGame, ArrayList officialInGame, ArrayList superAthletesInGame){
 		int athletesNumber = cyclistInGame.size() + superAthletesInGame.size();
 		// To check the athletes in game
 		if (athletesNumber <= 7) {
+			System.out.println("Now, we have these athletes :");
+			runnerMenu();
+			swimmerMenu();
 			cyclistMenu();
 			supperAthletesMenu();
 			System.out.println("Please enter the athletes' ID: ");
@@ -475,7 +565,10 @@ Data data = new Data();
 					System.out.println("You didn't input the right commond! Back to last menu");
 					cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				}
-			} else if (data.getSuperAthletesList().get(ID) == null && data.getCyclistList().get(ID) == null) {
+			}else if(data.getsprinterList().get(ID) != null || data.getSwimmerList().get(ID) != null){ 
+				System.out.println("Only cyclist and superathletes can participate in the cycling!");
+				cyclistMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
+			}else if (data.getSuperAthletesList().get(ID) == null && data.getCyclistList().get(ID) == null) {
 				System.out.println("The athlete does not exist!");
 				cyclistMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 			} else if (cyclistInGame.contains(data.getCyclistList().get(ID))
@@ -493,17 +586,12 @@ Data data = new Data();
 	}
 
 	public void officialMenu(){
-		int ocNumber = 1;
-		
-		System.out.println("Now, we have these official officers:");
-		
 		//To print all the official in the list
 		Iterator iter = data.getOfficialList().entrySet().iterator();		
 		while (iter.hasNext()){
 			HashMap.Entry<String, Official> entry = (Entry<String, Official>)iter.next();
-			System.out.println(ocNumber + ". official ID : " + entry.getKey() + "\tofficial Name : " 
+			System.out.println("official ID :\t" + entry.getKey() + "\tofficial Name :\t" 
 					+ entry.getValue().getName());
-			ocNumber++;
 		}
 	}
 	public void officialMenuControl(String gameID, ArrayList cyclistInGame, ArrayList officialInGame, ArrayList superAthletesInGame){
@@ -515,8 +603,8 @@ Data data = new Data();
 				cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 			if(data.getGameType().equals("Running"))
 				runningMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
-			//if(data.getGameType().equals("Swimming"))
-				//swimmingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
+			if(data.getGameType().equals("Swimming"))
+				swimmingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 		}
 		else{
 			officialMenu();
@@ -532,8 +620,8 @@ Data data = new Data();
 					cyclingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 				if(data.getGameType().equals("Running"))
 					runningMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
-				//if(data.getGameType().equals("Swimming"))
-					//swimmingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
+				if(data.getGameType().equals("Swimming"))
+					swimmingMenuControl(gameID, cyclistInGame, officialInGame, superAthletesInGame);
 			} 
 			else {
 				System.out.println("The official is not exist!");
@@ -543,7 +631,6 @@ Data data = new Data();
 		}
 	}
 
-	
 	//String pridict = null;
 	public void predictMenuControl(){		
 		if(data.getGameType() == null){
@@ -582,6 +669,7 @@ Data data = new Data();
 					|| data.getSuperAthletesInGame().contains(data.getSuperAthletesList().get(athleteID))){
 						data.setPredict(athleteID);
 						System.out.println("You predict " + athleteID + " as winner!");
+						data.getPredictList().put(data.getCycling().getGameID(), athleteID);
 						meanMenuControl();
 				} else {
 					System.out.println("The athlete does not exist, please try it again!");
@@ -598,6 +686,7 @@ Data data = new Data();
 					|| data.getSuperAthletesInGame().contains(data.getSuperAthletesList().get(athleteID))){
 						data.setPredict(athleteID);
 						System.out.println("You predict " + athleteID + " as winner!");
+						data.getPredictList().put(data.getSwimming().getGameID(), athleteID);
 						meanMenuControl();
 				} else {
 					System.out.println("The athlete does not exist, please try it again!");
@@ -613,6 +702,7 @@ Data data = new Data();
 						|| data.getSuperAthletesInGame().contains(data.getSuperAthletesList().get(athleteID))){
 					data.setPredict(athleteID);
 					System.out.println("You predict " + athleteID + " as winner!");
+					data.getPredictList().put(data.getRunning().getGameID(), athleteID);
 					meanMenuControl();
 				} else {
 					System.out.println("The athlete does not exist, please try it again!");
@@ -625,7 +715,6 @@ Data data = new Data();
 		}
 	}
 	
-	
 	public void startTheGame(){
 		if(data.getGameType() == null){
 			System.out.println("There are no games.");
@@ -636,15 +725,20 @@ Data data = new Data();
 				if(data.getGameType() == "Cycling"){
 					reStartUse = "ran";
 					String gameID = data.getCycling().getGameID();
+					System.out.println("The game is start. Please wait...");
 					startCycling(gameID, result);
 				}
 				else if(data.getGameType() == "Running"){
 					reStartUse = "ran";
 					String gameID = data.getRunning().getGameID();
+					System.out.println("The game is start. Please wait...");
 					startRunning(gameID, result);
 				}
 				else if(data.getGameType() == "Swimming"){
-					
+					reStartUse = "ran";
+					String gameID = data.getSwimming().getGameID();
+					System.out.println("The game is start. Please wait...");
+					startSwimming(gameID, result);
 				}
 				else{
 					System.out.println("The game does not exist.");
@@ -693,7 +787,7 @@ Data data = new Data();
 		Arrays.sort(rank);
 		String winner = null, second = null, third = null;
 		try{
-		    Thread.sleep(((int) rank[athletesNumber-1])*1);
+		    Thread.sleep(((int) rank[athletesNumber-1])*1000);
 		}
 		catch (InterruptedException e){
 		    //e.printStackTrace();
@@ -720,28 +814,7 @@ Data data = new Data();
 			System.out.println("You win!");
 		}else
 			System.out.println("You loose!");
-		if(data.getCyclistList().get(winner) != null){
-			Cyclist c1 = (Cyclist) data.getCyclistList().get(winner);
-			c1.setPoint(5);
-		}else{
-			SuperAthletes sa1 = (SuperAthletes) data.getSuperAthletesList().get(winner);
-			sa1.setPoint(5);
-		}
-		if(data.getCyclistList().get(second) != null){
-			Cyclist c2 = (Cyclist) data.getCyclistList().get(second);
-			c2.setPoint(2);
-		}else{
-			SuperAthletes sa2 = (SuperAthletes) data.getSuperAthletesList().get(second);
-			sa2.setPoint(2);
-		}
-		if(data.getCyclistList().get(third) != null){
-			Cyclist c2 = (Cyclist) data.getCyclistList().get(third);
-			c2.setPoint(1);
-		}else{
-			SuperAthletes sa2 = (SuperAthletes) data.getSuperAthletesList().get(third);
-			sa2.setPoint(1);
-		}
-//		setPoints(winner, second, third);
+		setPoints(winner, second, third);
 		meanMenuControl();
 	}
 	public void startRunning(String gameID, HashMap<String, Double> result){
@@ -793,61 +866,87 @@ Data data = new Data();
 			System.out.println("You win!");
 		}else
 			System.out.println("You loose!");
-//		if(data.getCyclistList().get(winner) != null){
-//			Cyclist c1 = (Cyclist) data.getCyclistList().get(winner);
-//			c1.setPoint(5);
-//		}else{
-//			SuperAthletes sa1 = (SuperAthletes) data.getSuperAthletesList().get(winner);
-//			sa1.setPoint(5);
-//		}
-//		if(data.getCyclistList().get(second) != null){
-//			Cyclist c2 = (Cyclist) data.getCyclistList().get(second);
-//			c2.setPoint(2);
-//		}else{
-//			SuperAthletes sa2 = (SuperAthletes) data.getSuperAthletesList().get(second);
-//			sa2.setPoint(2);
-//		}
-//		if(data.getCyclistList().get(third) != null){
-//			Cyclist c2 = (Cyclist) data.getCyclistList().get(third);
-//			c2.setPoint(1);
-//		}else{
-//			SuperAthletes sa2 = (SuperAthletes) data.getSuperAthletesList().get(third);
-//			sa2.setPoint(1);
-//		}
 		setPoints(winner, second, third);
 		meanMenuControl();
 	}
-	
+	public void startSwimming(String gameID, HashMap<String, Double> result){
+		int athletesNumber = data.getSwimmerInGame().size() + data.getSuperAthletesInGame().size();
+		double[] rank = new double[athletesNumber];
+		for(int i=0;i<data.getSwimmerInGame().size();i++){
+			Swimmer s = (Swimmer) data.getSwimmerInGame().get(i);
+			double time = s.compete(data.getGameType());
+			String ID = s.getID();
+			result.put(ID, time);
+			rank[i] = time;
+		}
+		int j=0;
+		for(int i=data.getSwimmerInGame().size();i<athletesNumber;i++){
+			SuperAthletes s = (SuperAthletes) data.getSuperAthletesInGame().get(j);
+			double time = s.compete(data.getGameType());
+			String ID = s.getID();
+			result.put(ID, time);
+			rank[i] = time;
+			j++;
+		}
+		Arrays.sort(rank);
+		String winner = null, second = null, third = null;
+		try{
+		    Thread.sleep(((int) rank[athletesNumber-1])*1000);
+		}
+		catch (InterruptedException e){
+		    //e.printStackTrace();
+		}
+		System.out.println("The game is finished.");
+		Iterator iter = result.entrySet().iterator();		
+		while (iter.hasNext()){
+			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
+			if(entry.getValue()==rank[0]){
+				winner = entry.getKey();
+			}
+			if(entry.getValue()==rank[1]){
+				second = entry.getKey();
+			}
+			if(entry.getValue()==rank[2]){
+				third = entry.getKey();
+			}
+		}
+		System.out.println("The winner is: " + winner + "\tHis result is: " + rank[0]);
+		System.out.println("The second is: " + second + "\tHis result is: " + rank[1]);
+		System.out.println("The third  is: " + third + "\tHis result is: " + rank[2]);
+		data.getResultList().put(gameID, result);
+		if(data.getPredict().equals(winner)){
+			System.out.println("You win!");
+		}else
+			System.out.println("You loose!");
+		setPoints(winner, second, third);
+		meanMenuControl();
+	}
 	
 	public void setPoints(String winner, String second, String third){
 		if(data.getCyclistList().get(winner) != null || data.getsprinterList().get(winner) != null || data.getSwimmerList().get(winner)!= null){
 			if(data.getGameType().equals("Cycling")){
 				Cyclist c1 = (Cyclist) data.getCyclistList().get(winner);
 				c1.setPoint(5);
-			}
-			else if (data.getGameType().equals("Running")){
+			} else if (data.getGameType().equals("Running")){
 				Sprinter r1 = (Sprinter) data.getsprinterList().get(winner);
 				r1.setPoint(5);
-			} 
-			else if(data.getGameType().equals("Swimming")){
+			} else if(data.getGameType().equals("Swimming")){
 				Swimmer s1 = (Swimmer) data.getSwimmerList().get(winner);
 				s1.setPoint(5);
 			} else
 				System.out.println("There are some errors in setpoints()");
-		}else{
+		} else {
 			SuperAthletes sa1 = (SuperAthletes) data.getSuperAthletesList().get(winner);
 			sa1.setPoint(5);
-		}
+		} 
 		if(data.getCyclistList().get(second) != null || data.getsprinterList().get(second) != null || data.getSwimmerList().get(second) != null){
 			if(data.getGameType().equals("Cycling")){
 				Cyclist c2 = (Cyclist) data.getCyclistList().get(second);
 				c2.setPoint(2);
-			}
-			else if (data.getGameType().equals("Running")){
+			} else if (data.getGameType().equals("Running")){
 				Sprinter r2 = (Sprinter) data.getsprinterList().get(second);
 				r2.setPoint(2);
-			} 
-			else if(data.getGameType().equals("Swimming")){
+			} else if(data.getGameType().equals("Swimming")){
 				Swimmer s2 = (Swimmer) data.getSwimmerList().get(second);
 				s2.setPoint(2);
 			} else
@@ -860,12 +959,10 @@ Data data = new Data();
 			if(data.getGameType().equals("Cycling")){
 				Cyclist c3 = (Cyclist) data.getCyclistList().get(third);
 				c3.setPoint(1);
-			}
-			else if (data.getGameType().equals("Running")){
+			} else if (data.getGameType().equals("Running")){
 				Sprinter r3 = (Sprinter) data.getsprinterList().get(third);
 				r3.setPoint(1);
-			} 
-			else if(data.getGameType().equals("Swimming")){
+			} else if(data.getGameType().equals("Swimming")){
 				Swimmer s3 = (Swimmer) data.getSwimmerList().get(third);
 				s3.setPoint(1);
 			} else
@@ -877,82 +974,15 @@ Data data = new Data();
 	}
 	public void resetPoints(){
 		if(data.getGameType() == "Cycling"){
-			resetCyclistPoints();
-		} else if(data.getGameType() == "Running"){
-			resetRunnerPoints();
+			data.getCycling().resetPoints(data);
+		} 
+		else if(data.getGameType() == "Running"){
+			data.getRunning().resetPoints(data);
+		}
+		else if(data.getGameType() == "Swimming"){
+			data.getSwimming().resetPoints(data);
 		}
 	}
-	public void resetCyclistPoints(){
-		data.getCycling().getGameID();
-		HashMap<String, Double> reset = (HashMap<String, Double>) data.getResultList().get(data.getCycling().getGameID());
-		Iterator iter = reset.entrySet().iterator();
-		Double[] rank = new Double[reset.size()];
-		int i = 0;
-		while(iter.hasNext()){
-			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
-			rank[i] = entry.getValue();
-			i++;
-		}
-		Arrays.sort(rank);
-		iter = reset.entrySet().iterator();
-		while(iter.hasNext()){
-			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
-			if(entry.getValue() == rank[0] && data.getCyclistList().containsKey(entry.getKey())){
-				((Cyclist) data.getCyclistList().get(entry.getKey())).setPoint(-5);;
-			}
-			if(entry.getValue() == rank[1] && data.getCyclistList().containsKey(entry.getKey())){
-				((Cyclist) data.getCyclistList().get(entry.getKey())).setPoint(-2);;
-			}
-			if(entry.getValue() == rank[2] && data.getCyclistList().containsKey(entry.getKey())){
-				((Cyclist) data.getCyclistList().get(entry.getKey())).setPoint(-1);;
-			}
-			if(entry.getValue() == rank[0] && data.getSuperAthletesList().containsKey(entry.getKey())){
-				((SuperAthletes) data.getSuperAthletesList().get(entry.getKey())).setPoint(-5);;
-			}
-			if(entry.getValue() == rank[1] && data.getSuperAthletesList().containsKey(entry.getKey())){
-				((SuperAthletes) data.getSuperAthletesList().get(entry.getKey())).setPoint(-2);;
-			}
-			if(entry.getValue() == rank[2] && data.getSuperAthletesList().containsKey(entry.getKey())){
-				((SuperAthletes) data.getSuperAthletesList().get(entry.getKey())).setPoint(-1);;
-			}
-		}
-	}
-	public void resetRunnerPoints(){
-		data.getRunning().getGameID();
-		HashMap<String, Double> reset = (HashMap<String, Double>) data.getResultList().get(data.getRunning().getGameID());
-		Iterator iter = reset.entrySet().iterator();
-		Double[] rank = new Double[reset.size()];
-		int i = 0;
-		while(iter.hasNext()){
-			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
-			rank[i] = entry.getValue();
-			i++;
-		}
-		Arrays.sort(rank);
-		iter = reset.entrySet().iterator();
-		while(iter.hasNext()){
-			HashMap.Entry<String, Double> entry = (Entry<String, Double>)iter.next();
-			if(entry.getValue() == rank[0] && data.getsprinterList().containsKey(entry.getKey())){
-				((Sprinter) data.getsprinterList().get(entry.getKey())).setPoint(-5);
-			}
-			if(entry.getValue() == rank[1] && data.getsprinterList().containsKey(entry.getKey())){
-				((Sprinter) data.getsprinterList().get(entry.getKey())).setPoint(-2);
-			}
-			if(entry.getValue() == rank[2] && data.getsprinterList().containsKey(entry.getKey())){
-				((Sprinter) data.getsprinterList().get(entry.getKey())).setPoint(-1);
-			}
-			if(entry.getValue() == rank[0] && data.getSuperAthletesList().containsKey(entry.getKey())){
-				((SuperAthletes) data.getSuperAthletesList().get(entry.getKey())).setPoint(-5);;
-			}
-			if(entry.getValue() == rank[1] && data.getSuperAthletesList().containsKey(entry.getKey())){
-				((SuperAthletes) data.getSuperAthletesList().get(entry.getKey())).setPoint(-2);;
-			}
-			if(entry.getValue() == rank[2] && data.getSuperAthletesList().containsKey(entry.getKey())){
-				((SuperAthletes) data.getSuperAthletesList().get(entry.getKey())).setPoint(-1);;
-			}
-		}
-	}
-	
 	
 	public void desplayAllGameResults(){
 		if(data.getResultList().size()!=0){
@@ -1000,8 +1030,7 @@ Data data = new Data();
 		thirderName = getAthletesName(third, thirderName);
 		referee = data.getOfficial().getID();
 		refereeName = data.getOfficial().getName();
-		
-		System.out.println("GameID:\t" + gameID);
+		System.out.println("GameID:\t" + gameID +"\tUser prediction:\t" + data.getPredictList().get(gameID));
 		System.out.println("\tRefereeID:\t" + referee + "\tReferee's Name:\t" + refereeName);
 		System.out.println("\tWinnerID:\t" + winner + "\tWinner's Name:\t" + winnerName + "\tResult:\t" + rank[0]);
 		System.out.println("\tSeconderID:\t" + second + "\tseconder's Name:" + seconderName + "\tResult:\t" + rank[1]);
@@ -1028,36 +1057,47 @@ Data data = new Data();
 		return Name;
 	}
 	
-	
 	public void displayPointsOfAllAthletes(){
+		int[] rank = new int[data.getCyclistList().size()+data.getSwimmerList().size()+data.getsprinterList().size()+data.getSuperAthletesList().size()];
+		HashMap<String, Integer> allAthletesPoint = new HashMap<String, Integer>();
+		int i = 0;
 		//All cyclists points
 		Iterator iter = data.getCyclistList().entrySet().iterator();		
 		while (iter.hasNext()){
 			HashMap.Entry<String, Cyclist> entry = (Entry<String, Cyclist>)iter.next();
-			System.out.println("Cyclist ID : " + entry.getKey() + "\tCyclist Name : " 
-					+ entry.getValue().getName() + "\tCyclist points : " + entry.getValue().getPoint());
+			allAthletesPoint.put(entry.getValue().getName(), entry.getValue().getPoint());
 		}
 		//All swimmer points
 		iter = data.getSwimmerList().entrySet().iterator();		
 		while (iter.hasNext()){
 			HashMap.Entry<String, Swimmer> entry = (Entry<String, Swimmer>)iter.next();
-			System.out.println("Swimmer ID : " + entry.getKey() + "\tSwimmer Name : " 
-					+ entry.getValue().getName() + "\tSwimmer points : " + entry.getValue().getPoint());
+			allAthletesPoint.put(entry.getValue().getName(), entry.getValue().getPoint());
 		}
 		//All sprinter points
 		iter = data.getsprinterList().entrySet().iterator();		
 		while (iter.hasNext()){
 			HashMap.Entry<String, Sprinter> entry = (Entry<String, Sprinter>)iter.next();
-			System.out.println("Sprinter ID : " + entry.getKey() + "\tSprinter Name : " 
-					+ entry.getValue().getName() + "\tSprinter points : " + entry.getValue().getPoint());
+			allAthletesPoint.put(entry.getValue().getName(), entry.getValue().getPoint());
 		}
 		//all superathlete points
 		iter = data.getSuperAthletesList().entrySet().iterator();		
 		while (iter.hasNext()){
 			HashMap.Entry<String, SuperAthletes> entry = (Entry<String, SuperAthletes>)iter.next();
-			System.out.println("SuperAthletes ID : " + entry.getKey() + "\tSuperAthletes Name : " 
-					+ entry.getValue().getName() + "\tSuperAthletes points : " + entry.getValue().getPoint());
+			allAthletesPoint.put(entry.getValue().getName(), entry.getValue().getPoint());
 		}
+		//To sort it
+		List<Map.Entry<String,Integer>> list = new ArrayList<Map.Entry<String, Integer>>(allAthletesPoint.entrySet());
+        Collections.sort(list,new Comparator<Map.Entry<String,Integer>>() {
+            public int compare(Entry<String, Integer> o1,
+                    Entry<String, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+            
+        });
+        
+        for(Entry<String, Integer> mapping:list){ 
+               System.out.println(mapping.getKey()+":"+mapping.getValue()); 
+          } 
 		meanMenuControl();
 	}
 	
